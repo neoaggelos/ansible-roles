@@ -1,0 +1,27 @@
+---
+- name: install prerequisite packages
+  package:
+    name: "{{ client_packages[ansible_distribution | lower] }}"
+    state: present
+  tags: [nfs, packages]
+
+- name: create directories
+  when: item.state | default('mounted') != 'absent'
+  file:
+    path: "{{ item.mount }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+  loop: "{{ nfs_clients[inventory_hostname] }}"
+  tags: [nfs, mounts]
+
+- name: mount nfs shares
+  mount:
+    path: "{{ item.mount }}"
+    src: "{{ item.host }}:{{ item.share }}"
+    fstype: nfs
+    state: "{{ item.state | default('mounted') }}"
+    opts: "{{ nfs_mount_options }}"
+  loop: "{{ nfs_clients[inventory_hostname] }}"
+  tags: [nfs, mounts]

@@ -1,0 +1,30 @@
+---
+- name: download rke2
+  shell:
+    cmd: |
+      curl https://get.rke2.io -L | sh -
+    creates: /usr/local/bin/rke2-uninstall.sh
+  tags: [rke2, master]
+
+- name: configure rke2-server service
+  lineinfile:
+    path: "{{ rke2_server_env[ansible_distribution | lower] }}"
+    line: "{{ item }}"
+  no_log: true
+  loop:
+    - RKE2_URL="https://{{ groups.rke2_init[0] }}:9345"
+    - RKE2_TOKEN="{{ rke2_token }}"
+  notify:
+    - restart rke2-server
+  tags: [rke2, master, config]
+
+- name: enable rke2-server
+  when: "'rke2-server.service' not in services"
+  service:
+    name: "{{ rke2_server_service[ansible_distribution | lower] }}"
+    enabled: true
+  tags: [rke2, master, service]
+
+- name: force handlers
+  meta: flush_handlers
+  tags: [rke2, master, service]

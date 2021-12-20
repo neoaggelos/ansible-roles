@@ -1,0 +1,51 @@
+---
+- name: set ansible_distribution fact
+  setup:
+    filter: ansible_distribution
+  tags: [node_exporter, textfile, prerequisites]
+
+- name: update package cache
+  when: (ansible_distribution | lower) in ['ubuntu', 'debian']
+  apt:
+    update_cache: true
+  tags: [node_exporter, textfile, prerequisites]
+
+- name: install prerequisites
+  package:
+    name: moreutils
+    state: present
+  tags: [node_exporter, textfile, prerequisites]
+
+- name: ensure directories for collector scripts
+  file:
+    path: "{{ node_exporter_textfile_dir }}/scripts"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  tags: [node_exporter, textfile]
+
+- name: fetch node exporter collector scripts
+  when: item.value.enabled
+  get_url:
+    url: "{{ item.value.script }}"
+    dest: "{{ node_exporter_textfile_dir }}/scripts/{{ item.key }}"
+    owner: root
+    group: root
+    mode: 0555
+  loop: "{{ node_exporter_textfile_crons | dict2items }}"
+  tags: [node_exporter, textfile]
+
+- name: configure cronjob for node exporter collector scripts
+  cron:
+    state: "{{ 'present' if item.value.enabled else 'absent' }}"
+    name: text file collector plugin {{ item.key }}
+    minute: "{{ item.value.cron.split(' ')[0] }}"
+    hour: "{{ item.value.cron.split(' ')[1] }}"
+    day: "{{ item.value.cron.split(' ')[2] }}"
+    month: "{{ item.value.cron.split(' ')[3] }}"
+    weekday: "{{ item.value.cron.split(' ')[4] }}"
+    job: |
+      "{{ node_exporter_textfile_dir }}/scripts/{{ item.key }}" | /usr/bin/sponge "{{ node_exporter_textfile_dir }}/{{ item.key }}.prom"
+  loop: "{{ node_exporter_textfile_crons | dict2items }}"
+  tags: [node_exporter, textfile]

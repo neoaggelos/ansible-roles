@@ -1,0 +1,7 @@
+{% for export in nfs_exports[inventory_hostname] %}
+
+{{ export }} {% for client, shares in nfs_clients.items() %}{% for share in shares if (share.host, share.share) == (inventory_hostname, export) %}{% if (share.state | default('mounted')) != 'absent' %} {{ hostvars[client].ansible_default_ipv4.address }}({{ nfs_exports_options}}){% endif %}{% endfor %}{% endfor %}
+
+{% endfor %}
+
+{{ nfs_etc_exports_append }}

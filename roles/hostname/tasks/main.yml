@@ -1,0 +1,5 @@
+---
+- name: configure hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+  tags: [hostname]

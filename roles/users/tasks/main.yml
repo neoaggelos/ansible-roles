@@ -1,0 +1,91 @@
+---
+- name: set ansible_distribution fact
+  setup:
+    filter: ansible_distribution
+  tags: [users]
+
+- name: ensure sudo is installed
+  package:
+    name: sudo
+    state: present
+  tags: [users, sudo]
+
+- name: configure system groups
+  group:
+    name: "{{ item.name }}"
+  with_items: "{{ users_and_groups.groups | default([]) }}"
+  tags: [users, groups]
+
+- name: configure system users
+  user:
+    group: "{{ item.group | default(omit) }}"
+    groups: "{{ item.groups | default([ ]) | join(',') | default(omit) }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password | default(omit) }}"
+    shell: /bin/bash
+  with_items: "{{ users_and_groups.users }}"
+  when:
+    - item.only_host is not defined or inventory_hostname == item.only_host
+    - item.only_group is not defined or item.only_group in inventory_groups
+  no_log: true
+  tags: [users, create]
+
+- name: copy user ssh public keys
+  authorized_key:
+    manage_dir: yes
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_key }}"
+    state: present
+    exclusive: True
+  with_items: "{{ users_and_groups.users }}"
+  when:
+    - item.state is not defined or item.state != 'absent'
+    - item.ssh_key is defined
+  no_log: true
+  tags: [users, access]
+
+- name: ensure /etc/sudoers.d exists
+  file:
+    path: /etc/sudoers.d
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+  tags: [users, sudo]
+
+- name: enable include of /etc/sudoers.d
+  lineinfile:
+    name: /etc/sudoers
+    regexp: "^#includedir"
+    line: "#includedir /etc/sudoers.d"
+    state: present
+  tags: [users, sudo]
+
+- name: create sudoers config files
+  when:
+    - item.only_host is not defined or item.only_host == inventory_hostname
+    - item.only_group is not defined or item.only_group in inventory_groups
+  template:
+    src: sudoers.j2
+    dest: "/etc/sudoers.d/{{ item.name }}"
+    validate: /usr/sbin/visudo -cf %s
+    mode: 0644
+    owner: root
+    group: root
+  with_items: "{{ users_and_groups.sudoers }}"
+  tags: [users, sudo]
+
+- name: copy user dotfiles
+  when:
+    - item.user is defined and item.file is defined
+    - item.user in ((users_and_groups.users) | map(attribute='name'))
+  copy:
+    src: "{{ item.file }}"
+    dest: "{{ item.dest | default('/home/' + item.user + '/' + item.file) }}"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: "{{ item.mode | default('0644') }}"
+  with_items: "{{ user_dotfiles }}"
+  ignore_errors: true
+  no_log: true
+  tags: [users, files]

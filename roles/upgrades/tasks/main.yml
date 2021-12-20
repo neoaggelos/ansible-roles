@@ -1,0 +1,52 @@
+---
+- name: set ansible_distribution fact
+  setup:
+    gather_subset: hardware
+    filter: ansible_distribution
+  tags: [upgrades, facts]
+
+- name: update system packages
+  when:
+    - upgrade_packages_command != ''
+    - do_upgrades
+  shell: "{{ upgrade_packages_command }}"
+  register: upgrade_output
+  changed_when: upgrade_packages_unchanged_message not in upgrade_output.stdout
+  tags: [upgrades, perform]
+
+- name: autoremove system packages
+  when:
+    - do_upgrades
+    - autoremove
+    - autoremove_packages_command != ''
+  shell: "{{ autoremove_packages_command }}"
+  register: autoremove_output
+  changed_when: autoremove_packages_changed_message in autoremove_output.stdout
+  tags: [upgrades, autoremove]
+
+- name: set up cron script
+  when:
+    - upgrades_crondef != ''
+    - upgrade_packages_command != ''
+  template:
+    src: cron_updates.sh.j2
+    dest: /opt/cron_updates.sh
+    owner: root
+    group: root
+    mode: 0500
+  tags: [upgrades, cron]
+
+- name: set up cron
+  when:
+    - upgrades_crondef != ''
+    - upgrade_packages_command != ''
+  cron:
+    name: upgrades
+    minute: "{{ upgrades_crondef.split(' ')[0] }}"
+    hour: "{{ upgrades_crondef.split(' ')[1] }}"
+    day: "{{ upgrades_crondef.split(' ')[2] }}"
+    month: "{{ upgrades_crondef.split(' ')[3] }}"
+    weekday: "{{ upgrades_crondef.split(' ')[4] }}"
+    job: |
+      /opt/cron_updates.sh 2>&1 | tee -a "/tmp/cron_updates_`date -Iseconds`_$$.log"
+  tags: [upgrades, cron]

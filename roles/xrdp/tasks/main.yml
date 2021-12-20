@@ -1,0 +1,24 @@
+---
+- name: install desktop environment
+  package:
+    name: [xfce4, xfce4-goodies, xorg, dbus-x11, x11-xserver-utils]
+    state: present
+  tags: [gui, desktop]
+
+- name: install xrdp
+  package:
+    name: xrdp
+    state: present
+  tags: [gui, xrdp]
+
+- name: configure xrdp port
+  ini_file:
+    path: /etc/xrdp/xrdp.ini
+    option: port
+    value: "{{ rdp_port }}"
+    section: Globals
+    create: false
+    no_extra_spaces: true
+    state: present
+  tags: [gui, xrdp, config]
+  notify: restart xrdp

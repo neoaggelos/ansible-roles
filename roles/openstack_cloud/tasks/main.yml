@@ -1,0 +1,59 @@
+---
+- name: initialize flavors
+  os_nova_flavor:
+    name: "{{ item.key }}"
+    vcpus: "{{ item.value.vcpus }}"
+    ram: "{{ item.value.ram }}"
+    disk: "{{ item.value.disk }}"
+    flavorid: "{{ item.key }}"
+    extra_specs: "{{ item.value.properties | default({}) }}"
+  loop: "{{ flavors | dict2items }}"
+  tags: [flavors]
+
+- name: initialize external network
+  os_network:
+    name: external
+    external: true
+    provider_network_type: "{{ external_network.provider_network_type }}"
+    provider_physical_network: "{{ external_network.provider_physical_network }}"
+    project: admin
+  tags: [network]
+
+- name: initialize external network subnet
+  os_subnet:
+    network_name: external
+    name: external
+    cidr: "{{ external_network.cidr }}"
+    allocation_pool_start: "{{ external_network.allocation_pool_start }}"
+    allocation_pool_end: "{{ external_network.allocation_pool_end }}"
+    dns_nameservers: "{{ external_network.dns_nameservers }}"
+    enable_dhcp: "{{ external_network.enable_dhcp }}"
+    gateway_ip: "{{ external_network.gateway_ip }}"
+  tags: [network]
+
+- name: download images
+  get_url:
+    url: "{{ item.value }}"
+    dest: "./{{ item.key }}.img"
+  loop: "{{ images | dict2items }}"
+  tags: [images]
+
+- name: add glance images
+  os_image:
+    name: "{{ item.key }}"
+    container_format: bare
+    disk_format: qcow2
+    filename: "{{ item.key }}.img"
+    is_public: true
+  loop: "{{ images | dict2items }}"
+  tags: [images]
+
+- name: create designate zones
+  when:
+  - designate.owner is defined
+  - designate.zones is defined
+  os_zone:
+    name: "{{ item }}"
+    email: "{{ designate.owner }}"
+  loop: "{{ designate.zones }}"
+  tags: [dns]

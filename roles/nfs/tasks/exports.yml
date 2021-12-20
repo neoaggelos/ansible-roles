@@ -1,0 +1,41 @@
+---
+- name: install nfs share prerequisites
+  package:
+    name: "{{ server_packages[ansible_distribution | lower] }}"
+    state: present
+  tags: [nfs, packages]
+
+- name: ensure directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+  loop: "{{ nfs_exports[inventory_hostname] | default([]) }}"
+  notify:
+    - run exportfs
+    - restart nfs server
+  tags: [nfs, shares]
+
+- name: configure exports
+  template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0400
+  notify:
+    - run exportfs
+    - restart nfs server
+  tags: [nfs, exports]
+
+- name: enable nfs server
+  service:
+    name: "{{ service[ansible_distribution | lower] }}"
+    enabled: true
+  tags: [nfs, service]
+
+- name: flush handlers
+  meta: flush_handlers
+  tags: [nfs]

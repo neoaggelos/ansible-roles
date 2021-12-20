@@ -1,0 +1,10 @@
+---
+- name: join cluster as master
+  environment:
+    K3S_URL: "https://{{ groups.k3s_init[0] }}:6443"
+    K3S_TOKEN: "{{ k3s_token }}"
+    INSTALL_K3S_EXEC: "server"
+  shell:
+    cmd: curl https://get.k3s.io -L | sh -
+    creates: /usr/local/bin/k3s-uninstall.sh
+  tags: [k3s, init, worker]

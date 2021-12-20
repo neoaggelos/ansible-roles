@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -eox
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+{{ upgrade_packages_command }}
+
+{% if autoremove and autoremove_packages_command != '' %}
+{{ autoremove_packages_command }}
+{% endif %}

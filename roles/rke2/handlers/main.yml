@@ -1,0 +1,12 @@
+---
+- name: restart rke2-server
+  service:
+    name: rke2-server
+    state: restarted
+  tags: [rke2, service]
+
+- name: restart rke2-agent
+  service:
+    name: rke2-agent
+    state: restarted
+  tags: [rke2, service]

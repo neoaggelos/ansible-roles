@@ -1,0 +1,12 @@
+##
+# {{ ansible_managed }}
+#
+Defaults:%sudo !requiretty
+{% if item.commands is string %}
+{% set commands = [item.commands] %}
+{% else %}
+{% set commands = item.commands %}
+{% endif %}
+{% for cmd in commands %}
+{{ item.user }}  {{ item.runas }}  {{ cmd }}
+{% endfor %}

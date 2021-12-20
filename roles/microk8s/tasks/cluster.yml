@@ -1,0 +1,25 @@
+---
+- name: enable plugins
+  shell: |
+    {{ microk8s_bin }} enable {{ microk8s_enable_plugins }}
+  tags: [k8s, init, master, plugins]
+
+- name: wait node ready
+  shell: |
+    {{ microk8s_bin }} status --wait-ready
+  changed_when: false
+  tags: [k8s, init, master]
+
+- name: get existing cluster nodes
+  shell: |
+    {{ microk8s_bin }} kubectl get node -o jsonpath="{range .items[*]}{.metadata.name}{'\n'}{end}"
+  changed_when: false
+  register: existing_nodes
+  tags: [k8s, init, master, register]
+
+- name: register new nodes
+  shell: |
+    {{ microk8s_bin }} add-node --token {{ item | hash('md5') }}
+  loop: "{{ groups.microk8s }}"
+  when: item not in existing_nodes.stdout_lines
+  tags: [k8s, init, master, register]

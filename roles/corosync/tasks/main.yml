@@ -1,0 +1,25 @@
+---
+- name: configure corosync
+  include_tasks: corosync.yml
+  tags: [vip, corosync]
+
+- name: flush handlers
+  meta: flush_handlers
+
+- name: disable stonith
+  when: corosync_vip_master
+  shell: crm configure property stonith-enabled=false
+  tags: [vip, corosync, stonith]
+
+- name: configure vip resource
+  when: corosync_vip_master
+  shell: crm configure primitive "{{ vip_name }}" ocf:IPaddr2
+    params "ip={{ vip_address }}" nic="{{ ansible_default_ipv4.interface }}"
+    op monitor interval=10s
+  register: result
+  changed_when:
+    - "'Found existing primitive with same ID' not in result.stderr"
+  failed_when:
+    - "'Found existing primitive with same ID' not in result.stderr"
+    - result.rc != 0
+  tags: [vip, corosync, vip]

@@ -1,0 +1,5 @@
+---
+- name: restart openvpn client
+  service:
+    name: "openvpn-client@{{ inventory_hostname }}"
+    state: restarted

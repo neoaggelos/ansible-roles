@@ -1,0 +1,23 @@
+---
+- name: get existing cluster nodes
+  shell: |
+    {{ microk8s_bin }} kubectl get node -o jsonpath="{range .items[*]}{.metadata.name}{'\n'}{end}"
+  changed_when: false
+  register: existing_nodes
+  tags: [k8s, init, worker, join]
+
+- name: join cluster
+  shell: |
+    {{ microk8s_bin }} join '{{ groups['microk8s_init'][0] }}:25000/{{ inventory_hostname | hash('md5') }}'
+  register: result
+  retries: 30
+  delay: 15
+  until: result.rc == 0
+  when: groups['microk8s_init'][0] not in existing_nodes.stdout_lines
+  tags: [k8s, init, worker, join]
+
+- name: wait for ready cluster
+  shell: |
+    {{ microk8s_bin }} status --wait-ready
+  changed_when: false
+  tags: [k8s, init]

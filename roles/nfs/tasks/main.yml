@@ -1,0 +1,23 @@
+---
+- name: set ansible_default_ipv4
+  when: inventory_hostname in (nfs_exports | default({}) | combine(nfs_clients | default({})))
+  setup:
+    gather_subset: network
+    filter: ansible_default_ipv4
+  tags: [nfs, facts]
+
+- name: set ansible_distribution fact
+  setup:
+    filter: ansible_distribution
+  when: inventory_hostname in (nfs_exports | default({}) | combine(nfs_clients | default({})))
+  tags: [nfs, facts]
+
+- name: configure nfs server shares
+  include_tasks: exports.yml
+  when: inventory_hostname in (nfs_exports | default({}))
+  tags: [nfs]
+
+- name: configure nfs client shares
+  include_tasks: clients.yml
+  when: inventory_hostname in (nfs_clients | default({}))
+  tags: [nfs]

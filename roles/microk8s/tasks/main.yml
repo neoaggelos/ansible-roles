@@ -1,0 +1,59 @@
+---
+- name: refresh microk8s snap
+  shell: |
+    snap install microk8s --classic
+  register: update_snap
+  changed_when: |
+    ('is already installed' not in update_snap.stderr)
+  tags: [k8s, init, install]
+
+- name: reset
+  shell:
+    cmd: |
+      {{ microk8s_bin }} leave
+      touch /.microk8s_initialized
+    creates: /.microk8s_initialized
+  tags: [k8s, init, install, reset]
+
+- name: wait for ready cluster
+  environment: "{{ microk8s_env }}"
+  shell: |
+    {{ microk8s_bin }} status --wait-ready
+  changed_when: false
+  tags: [k8s, init]
+
+- name: useful aliases
+  environment: "{{ microk8s_env }}"
+  shell: |
+    snap alias microk8s m
+    snap alias microk8s.kubectl kubectl
+    snap alias microk8s.kubectl k
+    snap alias microk8s.helm3 helm
+    snap alias microk8s.helm3 h
+  changed_when: false
+  tags: [k8s, init, alias]
+
+- name: add user to microk8s group
+  user:
+    name: "{{ ansible_user }}"
+    append: true
+    groups: [microk8s]
+  tags: [k8s, init, groups]
+
+- name: chown kube config folder
+  file:
+    state: directory
+    path: /home/{{ ansible_user }}/.kube
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  tags: [k8s, init, config]
+
+- name: initialize cluster
+  when: inventory_hostname in groups.microk8s_init
+  include_tasks: cluster.yml
+  tags: [k8s, init, cluster]
+
+- name: join cluster
+  when: inventory_hostname in groups.microk8s
+  include_tasks: join.yml
+  tags: [k8s, join, cluster]

@@ -1,0 +1,28 @@
+---
+- name: install keepalived
+  package:
+    name: keepalived
+    state: present
+  tags: [vip, keepalived, packages]
+
+- name: gather ansible network facts
+  setup:
+    gather_subset: network
+  tags: [vip, keepalived, facts]
+
+- name: configure keepalived
+  template:
+    src: keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+    mode: 0400
+    owner: root
+    group: root
+  notify:
+    - restart keepalived
+  tags: [vip, keepalived, config]
+
+- name: enable keepalived service
+  service:
+    name: keepalived
+    enabled: true
+  tags: [vip, keepalived, service]

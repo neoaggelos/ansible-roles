@@ -1,0 +1,26 @@
+---
+- name: prerequisite packages
+  package:
+    name: nfs-common
+    state: present
+  tags: [k3s, init, packages]
+
+- name: initialize k3s
+  when: inventory_hostname in groups.k3s_init
+  include_tasks: cluster.yml
+  tags: [k3s, init, master]
+
+- name: join masters
+  when: inventory_hostname in groups.k3s_controlplane
+  include_tasks: join_master.yml
+  tags: [k3s, init, master]
+
+- name: join workers
+  when: inventory_hostname in groups.k3s_worker
+  include_tasks: join_worker.yml
+  tags: [k3s, init, master]
+
+- name: install tools
+  when: inventory_hostname in ((groups.k3s_init + groups.k3s_controlplane)|default([]))
+  include_tasks: tools.yml
+  tags: [k3s, init, tools]

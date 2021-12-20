@@ -1,0 +1,24 @@
+---
+- name: set ansible_distribution fact
+  setup:
+    filter: ansible_distribution
+  tags: [utils, packages]
+
+- name: install epel release repo
+  when: (ansible_distribution | lower) == 'centos'
+  package:
+    name: epel-release
+    state: present
+  tags: [utils, packages, centos]
+
+- name: update package cache
+  when: (ansible_distribution | lower) in ['ubuntu', 'debian']
+  apt:
+    update_cache: true
+  tags: [utils, packages, apt]
+
+- name: install util packages
+  package:
+    name: "{{ packages[ansible_distribution | lower] }}"
+    state: present
+  tags: [utils, packages]

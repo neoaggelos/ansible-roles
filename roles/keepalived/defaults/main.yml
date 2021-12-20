@@ -1,0 +1,12 @@
+---
+keepalived_auth_pass: '0123467'
+keepalived_virtual_router_id: 151
+keepalived_priority: 100
+
+# vip_name: "vip-1"
+# vip_address: "10.10.10.100"
+vip_name: ""
+vip_address: ""
+
+vip_interface: "{{ ansible_default_ipv4.interface }}"
+vip_subnet_size: "{{ (ansible_default_ipv4.address + '/' + ansible_default_ipv4.netmask) | ipaddr('prefix') }}"

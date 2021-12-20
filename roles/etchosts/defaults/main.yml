@@ -1,0 +1,8 @@
+---
+etchosts_configure: true
+etchosts_add_self: true
+
+etchosts: |
+  {% for host in groups['all'] | sort %}
+  {{ hostvars[host].ansible_host }} {{ host }} {{ host.split('.')[0] }}
+  {% endfor %}

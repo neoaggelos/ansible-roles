@@ -1,0 +1,28 @@
+---
+- name: install openvpn
+  package:
+    name: openvpn
+    state: present
+  tags: [openvpn, client]
+
+- name: copy openvpn client configuration
+  synchronize:
+    src: "/opt/openvpn/{{ inventory_hostname }}.ovpn"
+    dest: "/etc/openvpn/client/{{ inventory_hostname }}.conf"
+    mode: push
+  delegate_to: "{{ groups['vpn'][0] }}"
+  tags: [openvpn, config]
+
+- name: use internal ip for vpn
+  replace:
+    path: "/etc/openvpn/client/{{ inventory_hostname }}.conf"
+    regexp: "^remote.*?$"
+    replace: "remote {{ hostvars[groups['vpn'][0]].ansible_host }} {{ vpn_port }}"
+  notify: restart openvpn client
+  tags: [openvpn, config]
+
+- name: enable openvpn client service
+  service:
+    name: "openvpn-client@{{ inventory_hostname }}"
+    enabled: true
+  tags: [openvpn, service]

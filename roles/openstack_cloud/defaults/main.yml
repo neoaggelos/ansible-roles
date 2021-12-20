@@ -1,0 +1,33 @@
+---
+external_network:
+  provider_network_type: flat
+  provider_physical_network: physnet1
+  cidr: 10.100.100.0/24
+  allocation_pool_start: 10.100.100.100
+  allocation_pool_end: 10.100.100.200
+  dns_nameservers: [8.8.4.4, 1.1.1.1]
+  enable_dhcp: false
+  gateway_ip: 10.100.100.1
+flavor_props:
+  quota:disk_read_iops_sec: 10240
+  quota:disk_write_iops_sec: 10240
+flavors:
+  m1.tiny: { vcpus: 1, ram: 512, disk: 1, properties: "{{ flavor_props }}" }
+  m1.small: { vcpus: 1, ram: 1024, disk: 10, properties: "{{ flavor_props }}" }
+  m1.medium: { vcpus: 2, ram: 2048, disk: 20, properties: "{{ flavor_props }}" }
+  m2.medium: { vcpus: 2, ram: 8192, disk: 20, properties: "{{ flavor_props }}" }
+  m1.large: { vcpus: 4, ram: 4096, disk: 20, properties: "{{ flavor_props }}" }
+  m1.huge: { vcpus: 8, ram: 8192, disk: 40 }
+images:
+  cirros: http://download.cirros-cloud.net/0.5.2/cirros-0.5.2-x86_64-disk.img
+  centos-7: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+  debian-10: https://cloud.debian.org/images/cloud/buster/latest/debian-10-generic-amd64.qcow2
+  debian-11: https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2
+  ubuntu-18.04: https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
+  ubuntu-20.04: https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
+  # trove-wallaby: https://tarballs.opendev.org/openstack/trove/images/trove-wallaby-guest-ubuntu-bionic.qcow2
+designate:
+  owner: admin@example.com
+  zones:
+  - admin.zone.
+  - other.admin.zone.

@@ -1,0 +1,78 @@
+---
+- name: create vpn directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+  with_items: [/opt/openvpn, /opt/openvpn/clients]
+  tags: [openvpn, init]
+
+- name: generate openvpn-install.sh
+  template:
+    src: openvpn-install.sh.j2
+    dest: /opt/openvpn/openvpn-install.sh
+    mode: 0700
+    owner: root
+    group: root
+  tags: [openvpn, install]
+
+- name: configure vpn server
+  environment:
+    AUTO_INSTALL: "y"
+    APRROVE_INSTALL: "y"
+    APPROVE_IP: "y"
+    IPV6_SUPPORT: "n"
+    PORT_CHOICE: "2"
+    PORT: "{{ vpn_port }}"
+    PROTOCOL_CHOICE: "1"
+    DNS: "1"
+    COMPRESSION_ENABLED: "n"
+    CUSTOMIZE_ENC: "n"
+    CLIENT: "default-client"
+    PASS: "1"
+  shell:
+    cmd: |
+      /opt/openvpn/openvpn-install.sh
+      mv /home/{{ ansible_user }}/default-client.ovpn /opt/openvpn
+    creates: "/opt/openvpn/default-client.ovpn"
+    chdir: /opt/openvpn
+  tags: [openvpn, install]
+
+- name: generate vpn clients
+  environment:
+    MENU_OPTION: "1"
+    CLIENT: "{{ item }}"
+    PASS: "1"
+  shell:
+    cmd: |
+      /opt/openvpn/openvpn-install.sh
+      mv "/home/{{ ansible_user }}/{{ item }}.ovpn" /opt/openvpn
+    chdir: /opt/openvpn
+    creates: "/opt/openvpn/{{ item }}.ovpn"
+  when:
+    - vpn_create_server_clients
+    - item != inventory_hostname
+  with_items: "{{ groups['all'] }}"
+  tags: [openvpn, users, system]
+
+- name: generate user vpn clients
+  environment:
+    MENU_OPTION: "1"
+    CLIENT: "{{ item }}"
+    PASS: "1"
+  shell:
+    cmd: |
+      /opt/openvpn/openvpn-install.sh
+      mv "/home/{{ ansible_user }}/{{ item }}.ovpn" /opt/openvpn/clients
+    chdir: /opt/openvpn/clients
+    creates: "/opt/openvpn/clients/{{ item }}.ovpn"
+  with_items: "{{ user_vpn_clients }}"
+  tags: [openvpn, users]
+
+- name: enable openvpn server service
+  service:
+    name: openvpn@server
+    enabled: true
+  tags: [openvpn, service]

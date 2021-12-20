@@ -1,0 +1,12 @@
+---
+- name: initialize cluster
+  environment:
+    INSTALL_K3S_SYMLINK: skip
+    INSTALL_K3S_EXEC: "{{ k3s_exec }} {{ k3s_exec_append_init }}"
+    K3S_TOKEN: "{{ k3s_token }}"
+    # K3S_DATASTORE_ENDPOINT: "{{ groups.etcd | map('regex_replace', '^(.+)$', '\\1:2379') | join(',') }}"
+  shell:
+    cmd: |
+      curl https://get.k3s.io -L | sh -
+    creates: /usr/local/bin/k3s-uninstall.sh
+  tags: [k3s, init, master]

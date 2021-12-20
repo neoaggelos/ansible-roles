@@ -1,0 +1,10 @@
+---
+- name: configure /etc/hosts for all hosts
+  when:
+    - etchosts_configure
+  blockinfile:
+    path: /etc/hosts
+    block: "{{ etchosts }}"
+    marker: "## {mark} ANSIBLE MANAGED HOSTS"
+  notify: clean known hosts
+  tags: [etchosts]

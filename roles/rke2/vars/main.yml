@@ -1,0 +1,25 @@
+---
+rke2_uninstall_sh:
+  ubuntu: /usr/local/bin/rke2-uninstall.sh
+  debian: /usr/local/bin/rke2-uninstall.sh
+  centos: /usr/bin/rke2-uninstall.sh
+
+rke2_server_service:
+  ubuntu: /usr/local/lib/systemd/system/rke2-server.service
+  debian: /usr/local/lib/systemd/system/rke2-server.service
+  centos: /usr/lib/systemd/system/rke2-server.service
+
+rke2_server_env:
+  ubuntu: /usr/local/lib/systemd/system/rke2-server.env
+  debian: /usr/local/lib/systemd/system/rke2-server.env
+  centos: /etc/sysconfig/rke2-server
+
+rke2_agent_service:
+  ubuntu: /usr/local/lib/systemd/system/rke2-agent.service
+  debian: /usr/local/lib/systemd/system/rke2-agent.service
+  centos: /usr/lib/systemd/system/rke2-agent.service
+
+rke2_agent_env:
+  ubuntu: /usr/local/lib/systemd/system/rke2-agent.env
+  debian: /usr/local/lib/systemd/system/rke2-agent.env
+  centos: /etc/sysconfig/rke2-agent

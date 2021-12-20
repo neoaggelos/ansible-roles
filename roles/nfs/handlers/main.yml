@@ -1,0 +1,10 @@
+---
+- name: run exportfs
+  shell: exportfs -a
+  tags: [nfs, exportfs]
+
+- name: restart nfs server
+  service:
+    name: "{{ service[ansible_distribution | lower] }}"
+    state: restarted
+  tags: [nfs, service]

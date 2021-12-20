@@ -1,0 +1,14 @@
+---
+# ssh_privkey: |
+#   -----BEGIN RSA PRIVATE KEY-----
+#   .....
+#   -----END RSA PRIVATE KEY-----
+ssh_privkey: ""
+
+# Install ssh private key for these users
+system_users:
+- {dir: /root, user: root}
+- {dir: "/home/{{ ansible_user }}", user: "{{ ansible_user }}"}
+
+# Enable SSH password authentication
+ssh_enable_password_auth: false

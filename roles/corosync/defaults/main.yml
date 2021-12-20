@@ -1,0 +1,13 @@
+---
+# vip_name: "vip-1"
+# vip_address: "10.10.10.200"
+vip_name: ""
+vip_address: ""
+
+# all_vips:
+#   vip-1:
+#     ip_address: 10.10.10.200
+#     instances: [host1, host2, host3]
+all_vips: {}
+
+vip_netmtu: "{{ ansible_default_ipv4.mtu }}"

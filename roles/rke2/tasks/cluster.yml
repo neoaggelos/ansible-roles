@@ -1,0 +1,58 @@
+---
+- name: download rke2
+  shell:
+    cmd: |
+      curl https://get.rke2.io -L | sh -
+    creates: "{{ rke2_uninstall_sh[ansible_distribution | lower] }}"
+  tags: [rke2, init, master]
+
+- name: create config directories
+  file:
+    path: "/home/{{ ansible_user }}/.kube"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+  tags: [rke2, init, config]
+
+- name: configure rke2-server service
+  lineinfile:
+    path: "{{ rke2_server_env[ansible_distribution | lower] }}"
+    line: "{{ item }}"
+  no_log: true
+  loop:
+    - RKE2_TOKEN="{{ rke2_token }}"
+    - RKE2_KUBECONFIG_OUTPUT="/home/{{ ansible_user }}/.kube/config"
+    - RKE2_KUBECONFIG_MODE="0644"
+  notify:
+    - restart rke2-server
+  tags: [rke2, init, config]
+
+- name: enable rke2-server
+  when: "'rke2-server.service' not in services"
+  service:
+    name: "{{ rke2_server_service[ansible_distribution | lower] }}"
+    enabled: true
+  tags: [rke2, init, service]
+
+- name: force handlers
+  meta: flush_handlers
+  tags: [rke2, init, service]
+
+- name: wait for initial node to come up
+  shell: /var/lib/rancher/rke2/bin/kubectl
+    wait "node/{{ ansible_nodename }}" --for condition=ready
+    --kubeconfig /etc/rancher/rke2/rke2.yaml
+  retries: 60
+  delay: 10
+  register: result
+  until: result.rc == 0
+  changed_when: false
+  tags: [rke2, init, service]
+
+- name: copy kubectl to path
+  file:
+    src: /var/lib/rancher/rke2/bin/kubectl
+    dest: /usr/local/bin/kubectl
+    state: link
+  tags: [rke2, init, tools]

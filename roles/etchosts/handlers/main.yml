@@ -1,0 +1,7 @@
+- name: clean known hosts
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /home/{{ ansible_user }}/.ssh/known_hosts
+    - /root/.ssh/known_hosts

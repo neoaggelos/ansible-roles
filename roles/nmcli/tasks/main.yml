@@ -1,0 +1,15 @@
+---
+- name: configure internal network
+  when:
+    - nmcli_interface != ""
+    - nmcli_ip_address != ""
+  nmcli:
+    type: ethernet
+    conn_name: "{{ nmcli_conn_name }}"
+    ip4: "{{ nmcli_ip_address }}/{{ nmcli_subnet_size }}"
+    ifname: "{{ nmcli_interface }}"
+    state: present
+    mtu: "{{ nmcli_mtu }}"
+  notify:
+    - restart internal network connection
+  tags: [interfaces]

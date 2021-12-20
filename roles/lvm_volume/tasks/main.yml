@@ -1,0 +1,7 @@
+---
+- name: configure volume groups
+  when:
+    - volume_groups is defined
+    - volume_groups[inventory_hostname] | default([])
+  include_tasks: configure.yml
+  tags: [volume]

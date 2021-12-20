@@ -1,0 +1,3 @@
+---
+- name: restart internal network connection
+  shell: nmcli con down "{{ nmcli_conn_name }}" && nmcli con up "{{ nmcli_conn_name }}"

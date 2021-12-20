@@ -1,0 +1,6 @@
+---
+nmcli_interface: ""
+nmcli_ip_address: ""
+
+nmcli_mtu: 9000
+nmcli_subnet_size: 16

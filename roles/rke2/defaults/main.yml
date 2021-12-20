@@ -1,0 +1,4 @@
+---
+rke2_token: replace_me
+
+rke2_wait_cluster: true

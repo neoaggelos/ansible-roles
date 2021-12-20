@@ -1,0 +1,11 @@
+---
+# volume_groups:
+#   HOSTNAME:
+#     vg1:
+#       disks: [/dev/vdb, /dev/vdc]
+#       mount: /data
+#       lvname: lv1
+volume_groups: {}
+
+# Default logical volume name, if `lvname` is not set above
+volume_lvname: "lv1"

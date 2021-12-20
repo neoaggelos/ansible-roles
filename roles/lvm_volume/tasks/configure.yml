@@ -1,0 +1,37 @@
+---
+- name: install prerequisite packages
+  package:
+    name: lvm2
+    state: present
+  tags: [volume, packages]
+
+- name: create volume group
+  lvg:
+    pvs: "{{ item.value.disks | list }}"
+    vg: "{{ item.key }}"
+  loop: "{{ volume_groups[inventory_hostname] | dict2items }}"
+  tags: [volume, vg, create]
+
+- name: create logical volume
+  lvol:
+    vg: "{{ item.key }}"
+    lv: "{{ item.value.lvname | default(volume_lvname) }}"
+    size: 100%VG
+  loop: "{{ volume_groups[inventory_hostname] | dict2items }}"
+  tags: [volume, vg, lv, create]
+
+- name: create filesystem
+  filesystem:
+    dev: "/dev/{{ item.key }}/{{ item.value.lvname | default(volume_lvname) }}"
+    fstype: ext4
+  loop: "{{ volume_groups[inventory_hostname] | dict2items }}"
+  tags: [volume, create]
+
+- name: mount volume
+  mount:
+    path: "{{ item.value.mount }}"
+    src: "/dev/{{ item.key }}/{{ item.value.lvname | default(volume_lvname) }}"
+    fstype: ext4
+    state: mounted
+  loop: "{{ volume_groups[inventory_hostname] | dict2items }}"
+  tags: [volume, mount]

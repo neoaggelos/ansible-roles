@@ -1,0 +1,8 @@
+---
+microk8s_bin: /snap/bin/microk8s
+
+microk8s_enable_plugins: dns storage ingress helm3
+
+microk8s_env:
+  LC_ALL: C.UTF-8
+  LANG: C.UTF-8

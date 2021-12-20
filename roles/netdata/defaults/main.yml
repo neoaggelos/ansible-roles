@@ -1,0 +1,7 @@
+---
+netdata_add_repository_script: https://packagecloud.io/install/repositories/netdata/netdata/script.deb.sh
+
+# enable Slack notifications
+slack_notification_enabled: false
+slack_webhook_url: "https://hooks.slack.com/services/AAAAAAAA/BBBBBBBB/CCCCCCCCCCCCCCCCCCCCCC"
+slack_webhook_recepient: "#channel-name"

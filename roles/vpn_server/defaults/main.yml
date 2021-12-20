@@ -1,0 +1,15 @@
+---
+# VPN subnet "10.8.0.0/24" is specified as "10.8.0"
+vpn_subnet: 10.8.0
+
+user_vpn_clients: [client-1, client-2]
+
+# VPN should push a default route to clients
+vpn_default_gateway: false
+
+# Route extra networks via the VPN
+vpn_networks:
+- network: 172.16.1.0
+  mask: 255.255.255.0
+
+vpn_create_server_clients: false

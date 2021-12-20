@@ -1,0 +1,33 @@
+---
+- name: check if tracker is installed
+  shell: tracker --help
+  register: tracker_cmd
+  failed_when: false
+  changed_when: false
+  tags: [tracker]
+
+- name: disable tracker services
+  when: tracker_cmd.rc == 0
+  shell: |
+    for f in tracker-extract tracker-miner-apps tracker-miner-fs tracker-miner-user-guides tracker-store; do
+      file="/etc/xdg/autostart/${f}.desktop"
+      if -f ${file} && ! grep Hidden=true ${file}; then
+        echo "Hidden=true" >> ${file}
+      fi
+    done
+    dbus-launch --exit-with-session gsettings set org.freedesktop.Tracker.Miner.Files ignored-files "['*']"
+    dbus-launch --exit-with-session gsettings set org.freedesktop.Tracker.Miner.Files crawling-interval -2
+    dbus-launch --exit-with-session gsettings set org.freedesktop.Tracker.Miner.Files enable-monitors false
+    yes | LANG=C tracker reset --hard
+    sed -i 's/X-GNOME-Autostart-enabled=.*/X-Gnome-Autostart-enabled=false/' /etc/xdg/autostart/tracker-store.desktop
+  tags: [tracker]
+
+- name: mask tracker services
+  when: tracker_cmd.rc == 0
+  shell: |
+    systemctl --global mask \
+      tracker-store.service tracker-miner-fs.service \
+      tracker-miner-rss.service tracker-extract.service \
+      tracker-miner-apps.service tracker-writeback.service
+    yes | tracker reset --hard
+  tags: [tracker]

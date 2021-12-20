@@ -1,0 +1,6 @@
+StrictHostKeyChecking no
+
+{% for host in groups.all %}
+Host {{ host }}
+    User {{ hostvars[host].ansible_user }}
+{% endfor %}

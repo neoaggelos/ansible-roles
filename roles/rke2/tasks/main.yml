@@ -1,0 +1,39 @@
+---
+- name: set service facts
+  service_facts: {}
+  tags: [rke2, facts]
+
+- name: set hardware facts
+  setup:
+    gather_subset: hardware
+  tags: [rke2, facts]
+
+- name: initialize rke2
+  when: inventory_hostname in groups.rke2_init
+  include_tasks: cluster.yml
+  tags: [rke2, init, controplane]
+
+- name: join controplane nodes
+  when: inventory_hostname in groups.rke2_controlplane
+  include_tasks: join_controplane.yml
+  tags: [rke2, init, controplane]
+
+- name: join worker nodes
+  when: inventory_hostname in groups.rke2_worker
+  include_tasks: join_worker.yml
+  tags: [rke2, init, worker]
+
+- name: wait for cluster to be ready
+  when:
+    - inventory_hostname == groups.rke2_init[0]
+    - rke2_wait_cluster
+  shell: /var/lib/rancher/rke2/bin/kubectl
+    wait "node/{{ hostvars[item].ansible_nodename }}" --for condition=ready
+    --kubeconfig /etc/rancher/rke2/rke2.yaml
+  loop: "{{ (groups.rke2_controlplane | default([])) + (groups.rke2_worker | default([])) }}"
+  retries: 60
+  delay: 10
+  register: result
+  until: result.rc == 0
+  changed_when: false
+  tags: [rke2, init, service]

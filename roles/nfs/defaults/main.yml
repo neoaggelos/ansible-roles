@@ -1,0 +1,17 @@
+---
+nfs_exports_options: rw,async,no_root_squash,no_all_squash,no_subtree_check
+nfs_mount_options: rw,async,hard,intr,noexec
+
+# nfs_exports:
+#   server_hostname:
+#     - /data/nfs
+nfs_exports: {}
+
+# nfs_clients:
+#   client_hostname:
+#     - { host: server_hostname, share: /data/nfs, mount: /client/data/nfs }
+#     - { host: server_hostname, share: /data/nfs, mount: /client/data/nfs, state: absent }   # to remove
+nfs_clients: {}
+
+# this will be appended at the end of the /etc/exports file.
+nfs_etc_exports_append: ""

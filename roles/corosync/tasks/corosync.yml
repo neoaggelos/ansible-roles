@@ -1,0 +1,20 @@
+---
+- name: set ansible_default_ipv4 fact
+  setup:
+    gather_subset: network
+    filter: ansible_default_ipv4
+  tags: [vip, corosync, facts]
+
+- name: install corosync
+  package:
+    name: "{{ corosync_packages }}"
+    state: present
+  tags: [vip, corosync, install]
+
+- name: configure corosync
+  template:
+    src: corosync.conf.j2
+    dest: /etc/corosync/corosync.conf
+  notify:
+    - restart corosync
+  tags: [vip, corosync, config]

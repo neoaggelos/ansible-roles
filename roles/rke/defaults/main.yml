@@ -1,0 +1,28 @@
+---
+rke_config_only: true
+
+rke_version: v1.2.7
+rke_kubernetes_version: v1.20.5-rancher1-1
+rke_cluster_name: rke
+
+rke_cluster_yml: |
+  ---
+  cluster_name: {{ rke_cluster_name | to_json }}
+
+  kubernetes_version: {{ rke_kubernetes_version | to_json }}
+
+  authorization: { mode: rbac }
+
+  nodes:
+  {% for host in (groups.rke_controlplane + groups.rke_worker) | unique %}
+    - address: {{ host | to_json }}
+      user: {{ hostvars[host].ansible_user | to_json }}
+      role:
+  {% if host in groups.rke_controlplane %}
+        - controlplane
+        - etcd
+  {% endif %}
+  {% if host in groups.rke_worker %}
+        - worker
+  {% endif %}
+  {% endfor %}

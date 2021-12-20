@@ -1,0 +1,30 @@
+---
+- name: add netdata repository
+  shell:
+    set -o pipefail
+    curl -s "{{ netdata_add_repository_script }}" | sudo bash
+  tags: [netdata, repository]
+
+- name: install netdata
+  package:
+    name: netdata
+    state: present
+  tags: [netdata, packages]
+
+- name: enable netdata service
+  service:
+    name: netdata
+    enabled: true
+    state: started
+  tags: [netdata, service]
+
+- name: configure alarms
+  template:
+    src: health_alarm_notify.conf.j2
+    dest: /etc/netdata/health_alarm_notify.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify:
+    - restart netdata
+  tags: [netdata, config]

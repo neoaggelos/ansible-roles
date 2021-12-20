@@ -1,0 +1,15 @@
+---
+server_packages:
+  ubuntu: [nfs-kernel-server]
+  debian: [nfs-kernel-server]
+  centos: [nfs-utils]
+
+client_packages:
+  ubuntu: [nfs-common]
+  debian: [nfs-common]
+  centos: [nfs-utils]
+
+service:
+  ubuntu: nfs-kernel-server
+  debian: nfs-kernel-server
+  centos: nfs-server

@@ -1,0 +1,32 @@
+---
+- name: download rke binary
+  get_url:
+    url: https://github.com/rancher/rke/releases/download/{{ rke_version }}/rke_linux-amd64
+    dest: /usr/local/bin/rke
+    mode: 0755
+    owner: root
+    group: root
+  tags: [rke, download]
+
+- name: build configuration
+  template:
+    src: cluster.yml.j2
+    dest: /opt/cluster.yml
+    mode: 0644
+    owner: root
+    group: root
+  tags: [rke, config]
+
+- name: initialize cluster
+  when: not rke_config_only
+  shell:
+    chdir: /opt
+    cmd: rke up --init
+  tags: [rke, init]
+
+- name: configure cluster
+  when: not rke_config_only
+  shell:
+    chdir: /opt
+    cmd: rke up
+  tags: [rke, init]

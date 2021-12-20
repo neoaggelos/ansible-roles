@@ -1,0 +1,42 @@
+---
+- name: create ssh config directories
+  file:
+    path: "{{ item.dir }}/.ssh"
+    state: directory
+    mode: 0700
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+  with_items: "{{ system_users }}"
+  tags: [ssh]
+
+- name: configure ssh key access between machines
+  when:
+    - ssh_privkey is defined and ssh_privkey != ''
+  template:
+    src: id_rsa.j2
+    dest: "{{ item.dir }}/.ssh/id_rsa"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: 0600
+  with_items: "{{ system_users }}"
+  no_log: true
+  tags: [ssh]
+
+- name: generate ssh config
+  template:
+    src: ssh_config.j2
+    dest: "{{ item.dir }}/.ssh/config"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: 0600
+  with_items: "{{ system_users }}"
+  tags: [ssh]
+
+- name: enable password authentication
+  when: ssh_enable_password_auth
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: PasswordAuthentication no
+    line: PasswordAuthentication yes
+  notify: restart sshd
+  tags: [ssh, password_auth]

@@ -1,0 +1,5 @@
+---
+- name: initialize rke cluster
+  when: inventory_hostname in groups.rke_init
+  include_tasks: init.yml
+  tags: [rke]

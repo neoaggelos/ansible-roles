@@ -1,0 +1,31 @@
+---
+- name: install cli
+  shell: |
+    snap install {{ item }} --classic
+    snap refresh {{ item }}
+  register: update_snap
+  changed_when: |
+    ('is already installed' not in update_snap.stderr)
+    or ('has no updates available' not in update_snap.stderr)
+  loop:
+    - kubectl
+    - helm
+  tags: [k3s, init, cli]
+
+- name: create kubeconfig directory
+  file:
+    path: /home/{{ ansible_user }}/.kube
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  tags: [k3s, init, config]
+
+- name: copy kubeconfig
+  copy:
+    remote_src: true
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: /home/{{ ansible_user }}/.kube/config
+    mode: 0400
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  tags: [k3s, init, config]

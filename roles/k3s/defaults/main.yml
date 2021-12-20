@@ -1,0 +1,6 @@
+---
+k3s_exec: --disable=traefik
+
+k3s_exec_append_init: --cluster-init
+
+k3s_token: replace_me

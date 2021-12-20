@@ -1,0 +1,33 @@
+---
+autoremove: true
+with_new_pkgs: true
+
+upgrade_packages_command: "{{ upgrade_packages_commands[ansible_distribution | lower] | default('') }}"
+upgrade_packages_unchanged_message: "{{ upgrade_packages_unchanged_messages[ansible_distribution | lower] | default('') }}"
+autoremove_packages_command: "{{ autoremove_packages_commands[ansible_distribution | lower] | default('') }}"
+autoremove_packages_changed_message: "{{ autoremove_packages_changed_messages[ansible_distribution | lower] | default('') }}"
+
+upgrade_packages_commands:
+  ubuntu: DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q
+    -o Dpkg::Options::=--force-confold {{ "--with-new-pkgs" if with_new_pkgs }}
+  debian: DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q
+    -o Dpkg::Options::=--force-confold {{ "--with-new-pkgs" if with_new_pkgs }}
+  centos: yum upgrade -y
+
+upgrade_packages_unchanged_messages:
+  ubuntu: 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+  debian: 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+  centos: No packages marked for update
+
+autoremove_packages_commands:
+  ubuntu: DEBIAN_FRONTEND=noninteractive apt-get -y -q
+    -o Dpkg::Options::=--force-confold autoremove
+  debian: DEBIAN_FRONTEND=noninteractive apt-get -y -q
+    -o Dpkg::Options::=--force-confold autoremove
+
+autoremove_packages_changed_messages:
+  ubuntu: The following packages will be REMOVED
+  debian: The following packages will be REMOVED
+
+do_upgrades: false
+upgrades_crondef: "{{ 59 | random(seed=inventory_hostname) }} 0 * * *"
