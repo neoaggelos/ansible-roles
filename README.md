@@ -13,6 +13,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `hostname`                | Configure host name                                        | Ubuntu, CentOS, Debian |
 | `k3s`                     | Configure a K3s cluster                                    | Ubuntu, CentOS, Debian |
 | `keepalived`              | Setup a VIP using Keepalived                               | Ubuntu, CentOS, Debian |
+| `kernel_modules_disable`  | Disable and blacklist Kernel modules                       | Ubuntu, CentOS, Debian |
 | `lvm_volume`              | Configure LVM volume group and logical volumes             | Ubuntu, CentOS, Debian |
 | `microk8s`                | Configure a MicroK8s cluster                               | Ubuntu, CentOS, Debian |
 | `netdata`                 | Configure netdata (and optional Slack alerts)              | Ubuntu                 |

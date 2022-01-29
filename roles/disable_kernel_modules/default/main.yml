@@ -1,0 +1,2 @@
+# list of modules to disable and blacklist
+kernel_modules_disable: []
