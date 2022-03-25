@@ -3,13 +3,16 @@ server_packages:
   ubuntu: [nfs-kernel-server]
   debian: [nfs-kernel-server]
   centos: [nfs-utils]
+  rocky: [nfs-utils]
 
 client_packages:
   ubuntu: [nfs-common]
   debian: [nfs-common]
   centos: [nfs-utils]
+  rocky: [nfs-utils]
 
 service:
   ubuntu: nfs-kernel-server
   debian: nfs-kernel-server
   centos: nfs-server
+  rocky: nfs-server

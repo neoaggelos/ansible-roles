@@ -5,11 +5,11 @@
   tags: [utils, packages]
 
 - name: install epel release repo
-  when: (ansible_distribution | lower) == 'centos'
+  when: (ansible_distribution | lower) in ['centos', 'rocky']
   package:
     name: epel-release
     state: present
-  tags: [utils, packages, centos]
+  tags: [utils, packages, epel]
 
 - name: update package cache
   when: (ansible_distribution | lower) in ['ubuntu', 'debian']

@@ -3,3 +3,4 @@ packages:
   ubuntu: [screen, sysstat, vim, openvpn, net-tools, curl, htop, jq, dnsutils, telnet, nmap, python3-dbus, libnm-dev]
   debian: [screen, sysstat, vim, openvpn, net-tools, curl, htop, jq, dnsutils, telnet, nmap]
   centos: [screen, sysstat, vim, openvpn, net-tools, curl, htop, jq, bind-utils, telnet, nmap]
+  rocky: [screen, sysstat, vim, openvpn, net-tools, curl, htop, jq, bind-utils, telnet, nmap]

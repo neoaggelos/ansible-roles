@@ -13,11 +13,13 @@ upgrade_packages_commands:
   debian: DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q
     -o Dpkg::Options::=--force-confold {{ "--with-new-pkgs" if with_new_pkgs }}
   centos: yum upgrade -y
+  rocky: yum upgrade -y
 
 upgrade_packages_unchanged_messages:
   ubuntu: 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
   debian: 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
   centos: No packages marked for update
+  rocky: No packages marked for update
 
 autoremove_packages_commands:
   ubuntu: DEBIAN_FRONTEND=noninteractive apt-get -y -q

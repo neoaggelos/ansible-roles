@@ -9,8 +9,8 @@
   include_tasks: debian.yml
   tags: [docker]
 
-- name: install docker for centos
-  when: ansible_distribution in ['CentOS']
+- name: install docker for centos/rocky
+  when: ansible_distribution in ['CentOS', 'Rocky']
   include_tasks: centos.yml
   tags: [docker]
 

@@ -3,6 +3,7 @@ sudo_group_distro:
   ubuntu: sudo
   debian: sudo
   centos: wheel
+  rocky: wheel
 
 sudo_group: "{{ sudo_group_distro[ansible_distribution | lower] | default('') }}"
 
