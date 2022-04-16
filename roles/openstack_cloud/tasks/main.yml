@@ -31,20 +31,18 @@
     gateway_ip: "{{ external_network.gateway_ip }}"
   tags: [network]
 
-- name: download images
-  get_url:
-    url: "{{ item.value }}"
-    dest: "./{{ item.key }}.img"
-  loop: "{{ images | dict2items }}"
-  tags: [images]
-
-- name: add glance images
-  os_image:
+- name: import images
+  neoaggelos.common.os_import_image:
     name: "{{ item.key }}"
+    url: "{{ item.value }}"
     container_format: bare
     disk_format: qcow2
-    filename: "{{ item.key }}.img"
-    is_public: true
+    visibility: public
+    metadata:
+      os_distro: "{{ (item.key | split('-'))[0] | default(omit) }}"
+      os_version: "{{ (item.key | split('-'))[1] | default(omit) }}"
+      architecture: x86_64
+      hypervisor_type: qemu
   loop: "{{ images | dict2items }}"
   tags: [images]
 
