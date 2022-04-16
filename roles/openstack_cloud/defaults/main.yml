@@ -23,9 +23,13 @@ images:
   centos-7: https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
   debian-10: https://cloud.debian.org/images/cloud/buster/latest/debian-10-generic-amd64.qcow2
   debian-11: https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-generic-amd64.qcow2
+  fedora-35: https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2
+  rocky-85: https://download.rockylinux.org/pub/rocky/8.5/images/Rocky-8-GenericCloud-8.5-20211114.2.x86_64.qcow2
+  ubuntu-16.04: https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
   ubuntu-18.04: https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
   ubuntu-20.04: https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
-  # trove-wallaby: https://tarballs.opendev.org/openstack/trove/images/trove-wallaby-guest-ubuntu-bionic.qcow2
+  ubuntu-21.10: https://cloud-images.ubuntu.com/impish/current/impish-server-cloudimg-amd64.img
+  ubuntu-22.04: https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
 designate:
   owner: admin@example.com
   zones:
