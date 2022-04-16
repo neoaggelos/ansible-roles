@@ -39,8 +39,8 @@
     disk_format: qcow2
     visibility: public
     metadata:
-      os_distro: "{{ (item.key | split('-'))[0] | default(omit) }}"
-      os_version: "{{ (item.key | split('-'))[1] | default(omit) }}"
+      os_distro: "{{ (item.key.split('-'))[0] | default(omit) }}"
+      os_version: "{{ (item.key.split('-'))[1] | default(omit) }}"
       architecture: x86_64
       hypervisor_type: qemu
   loop: "{{ images | dict2items }}"
