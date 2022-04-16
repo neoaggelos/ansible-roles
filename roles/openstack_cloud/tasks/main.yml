@@ -32,7 +32,7 @@
   tags: [network]
 
 - name: import images
-  neoaggelos.common.os_import_image:
+  neoaggelos.common.os_image_import:
     name: "{{ item.key }}"
     url: "{{ item.value }}"
     container_format: bare
