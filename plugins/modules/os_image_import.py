@@ -35,6 +35,11 @@ OPTIONS = {
         "type": "dict",
         "required": False,
     },
+    "rename_and_replace": {
+        "type": "bool",
+        "required": False,
+        "default": False,
+    },
 }
 
 DOCUMENTATION = """
@@ -60,6 +65,7 @@ EXAMPLES = """
         disk_format: qcow2
         container_format: bare
         visibility: public
+        rename_and_replace: true
         metadata:
           architecture: x86_64
           hypervisor_type: qemu
@@ -101,12 +107,24 @@ def run_module():
     image_url = module.params["url"]
     disk_format = module.params["disk_format"]
     container_format = module.params["container_format"]
+    rename_and_replace = module.params["rename_and_replace"]
     visibility = module.params["visibility"]
     metadata = module.params.get("metadata", {})
     changed = False
 
     c = openstack.connect()
     image = c.get_image(module.params["name"])
+    expected_image_size = urllib.request.urlopen(image_url).headers.get("content-length")
+
+    # image upstream source has changed, rename old image then create new one
+    if (
+        image is not None
+        and rename_and_replace
+        and (not expected_image_size or expected_image_size != str(image.size))
+    ):
+        c.image.update_image(image=image, name=f"{image.name}-{image.created_at}")
+        image = None
+        changed = True
 
     if image is None:
         image = c.create_image(
@@ -117,20 +135,16 @@ def run_module():
             visibility=visibility,
         )
         changed = True
-    else:
-        for key, value in metadata.items():
-            if value != image.metadata.get(key):
-                c.update_image_properties(image=image, meta=metadata)
-                changed = True
-                break
-
-        if image.visibility != visibility:
-            c.image.update_image(image=image, visibility=visibility)
-            changed = True
-
-    expected_image_size = urllib.request.urlopen(image_url).headers.get("content-length")
-    if not expected_image_size or expected_image_size != str(image.size):
         c.image.import_image(image=image, method="web-download", uri=image_url)
+
+    for key, value in metadata.items():
+        if value != image.metadata.get(key):
+            c.update_image_properties(image=image, meta=metadata)
+            changed = True
+            break
+
+    if image.visibility != visibility:
+        c.image.update_image(image=image, visibility=visibility)
         changed = True
 
     module.exit_json(
