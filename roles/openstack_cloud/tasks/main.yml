@@ -38,6 +38,7 @@
     container_format: bare
     disk_format: qcow2
     visibility: public
+    rename_and_replace: true
     metadata:
       os_distro: "{{ (item.key.split('-'))[0] | default(omit) }}"
       os_version: "{{ (item.key.split('-'))[1] | default(omit) }}"
