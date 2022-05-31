@@ -138,7 +138,7 @@ def run_module():
         c.image.import_image(image=image, method="web-download", uri=image_url)
 
     for key, value in metadata.items():
-        if value != image.metadata.get(key):
+        if value != (image.metadata or {}).get(key):
             c.update_image_properties(image=image, meta=metadata)
             changed = True
             break
