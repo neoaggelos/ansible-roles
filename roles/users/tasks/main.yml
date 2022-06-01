@@ -26,6 +26,7 @@
   with_items: "{{ users_and_groups.users }}"
   when:
     - item.only_host is not defined or inventory_hostname == item.only_host
+    - item.only_hosts is not defined or inventory_hostname in item.only_hosts
     - item.only_group is not defined or item.only_group in inventory_groups
   no_log: true
   tags: [users, create]
