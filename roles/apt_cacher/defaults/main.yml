@@ -1,0 +1,10 @@
+---
+apt_cacher_conf_d: /etc/apt-cacher/conf.d
+apt_cacher_allowed_hosts: 10.0.0.0/16
+apt_cacher_allowed_ssl_locations: download.docker.com, apt.releases.hashicorp.com, packages.microsoft.com, dl.google.com, deb.nodesource.com
+
+apt_cacher_configs:
+  10allow: |
+    allowed_hosts = {{ apt_cacher_allowed_hosts }}
+  10ssl: |
+    allowed_ssl_locations = {{ apt_cacher_allowed_ssl_locations }}

@@ -1,0 +1,5 @@
+---
+- name: restart apt-cacher
+  service:
+    name: apt-cacher
+    state: restarted

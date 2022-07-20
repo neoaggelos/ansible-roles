@@ -6,6 +6,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 
 | Role                      | Description                                                | Support                       |
 | ------------------------- | ---------------------------------------------------------- | ----------------------------- |
+| `apt_cacher`              | Setup a caching apt proxy                                  | Ubuntu                        |
 | `corosync`                | Setup a VIP resource using a Corosync cluster              | Ubuntu 18.04                  |
 | `disable_tracker`         | Disable GNOME Tracker                                      | Ubuntu                        |
 | `docker`                  | Install Docker and (optionally) Docker Compose             | Ubuntu, CentOS, Rocky, Debian |
