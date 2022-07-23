@@ -1,6 +1,7 @@
 ---
 - name: install apt-cacher
   package:
+    update_cache: true
     name: apt-cacher
   tags: [apt-cacher, packages]
 
