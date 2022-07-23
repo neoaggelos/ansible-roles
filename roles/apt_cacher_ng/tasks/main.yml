@@ -1,0 +1,22 @@
+---
+- name: install apt-cacher-ng
+  package:
+    update_cache: true
+    name: apt-cacher-ng
+  tags: [apt-cacher-ng, packages]
+
+- name: configure apt-cacher-ng
+  lineinfile:
+    regexp: "^{{ item.key }}:"
+    line: "{{ item.key }}: {{ item.value }}"
+    path: "{{ apt_cacher_ng_config_file }}"
+  loop: "{{ apt_cacher_ng_configs | dict2items }}"
+  notify:
+    - restart apt-cacher-ng
+  tags: [apt-cacher-ng, configs]
+
+- name: enable apt-cacher-ng service
+  service:
+    name: apt-cacher-ng
+    enabled: true
+  tags: [apt-cacher-ng, service]

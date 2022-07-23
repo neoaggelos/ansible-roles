@@ -1,0 +1,7 @@
+---
+apt_cacher_ng_passthrough_pattern: ".*"
+
+apt_cacher_ng_config_file: /etc/apt-cacher-ng/acng.conf
+
+apt_cacher_ng_configs:
+  PassThroughPattern: "{{ apt_cacher_ng_passthrough_pattern }}"
