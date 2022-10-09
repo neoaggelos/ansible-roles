@@ -6,6 +6,6 @@ netdata_conf: |
     bind socket to IP = localhost
 
 # enable Slack notifications
-slack_notifications_enabled: false
-slack_webhook_url: "https://hooks.slack.com/services/AAAAAAAA/BBBBBBBB/CCCCCCCCCCCCCCCCCCCCCC"
-slack_webhook_recepient: "#channel-name"
+netadata_slack_notifications_enabled: false
+netadata_slack_webhook_url: "https://hooks.slack.com/services/AAAAAAAA/BBBBBBBB/CCCCCCCCCCCCCCCCCCCCCC"
+netadata_slack_webhook_recepient: "#channel-name"

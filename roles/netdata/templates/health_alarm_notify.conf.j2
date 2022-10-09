@@ -1,8 +1,8 @@
-{% if slack_notifications_enabled %}
+{% if netdata_slack_notifications_enabled %}
 
 SEND_SLACK="YES"
-SLACK_WEBHOOK_URL="{{ slack_webhook_url }}"
-DEFAULT_RECIPIENT_SLACK="{{ slack_webhook_recepient }}"
+SLACK_WEBHOOK_URL="{{ netdata_slack_webhook_url }}"
+DEFAULT_RECIPIENT_SLACK="{{ netdata_slack_webhook_recepient }}"
 
 role_recipients_slack[sysadmin]="${DEFAULT_RECIPIENT_SLACK}"
 role_recipients_slack[domainadmin]="${DEFAULT_RECIPIENT_SLACK}"
