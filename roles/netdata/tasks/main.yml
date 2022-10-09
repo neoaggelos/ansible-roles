@@ -1,8 +1,10 @@
 ---
 - name: add netdata repository
-  shell: |
-    set -o pipefail
-    curl -s "{{ netdata_add_repository_script }}" | sudo bash
+  shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail
+      curl -s "{{ netdata_add_repository_script }}" | sudo bash
   tags: [netdata, repository]
 
 - name: install netdata
