@@ -2,8 +2,6 @@
 netdata_add_repository_script: https://packagecloud.io/install/repositories/netdata/netdata/script.deb.sh
 
 netdata_conf: |
-  {{ ansible_managed }}
-
   [global]
     bind socket to IP = localhost
 
