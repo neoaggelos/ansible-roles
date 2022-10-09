@@ -30,3 +30,12 @@
   notify:
     - restart netdata
   tags: [netdata, config]
+
+- name: configure netdata
+  blockinfile:
+    path: /etc/netdata/netdata.conf
+    block: "{{ netdata_conf }}"
+    marker: "## {mark} ANSIBLE MANAGED CONFIGURATION"
+  notify:
+    - restart netdata
+  tags: [netdata, config]
