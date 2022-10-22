@@ -19,6 +19,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `lvm_volume`              | Configure LVM volume group and logical volumes             | Ubuntu, CentOS, Rocky, Debian |
 | `microk8s`                | Configure a MicroK8s cluster                               | Ubuntu, CentOS, Rocky, Debian |
 | `netdata`                 | Configure netdata (and optional Slack alerts)              | Ubuntu                        |
+| `netplan`                 | Configure netplan                                          | Ubuntu, CentOS, Rocky, Debian |
 | `nfs`                     | Configure NFS server and clients                           | Ubuntu, CentOS, Rocky, Debian |
 | `nmcli`                   | Configure a NetworkManager connection using nmcli          | Ubuntu                        |
 | `node_exporter_text_file` | Configure text file exporters for Node Exporter            | Ubuntu, CentOS, Rocky, Debian |

@@ -1,0 +1,16 @@
+---
+# netplan_fragments:
+#   70-storage.yaml:
+#     state: present
+#     contents: |
+#       version: 2
+#       ethernets:
+#         eth4:
+#           dhcp4: true
+netplan_fragments: {}
+
+# Netplan configuration directory
+netplan_config_dir: /etc/netplan
+
+# Netplan binary
+netplan_binary: netplan

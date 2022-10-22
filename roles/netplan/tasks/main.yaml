@@ -1,0 +1,32 @@
+---
+- name: copy netplan configuration
+  template:
+    src: netplan_fragment.yml.j2
+    dest: "{{ netplan_config_dir }}/{{ filename }}"
+    owner: "root"
+    group: "root"
+    mode: "0440"
+  loop: "{{ netplan_fragments | dict2items }}"
+  vars:
+    filename: "{{ item.key }}"
+    contents: "{{ item.value.contents | default('') }}"
+    state: "{{ item.value.state | default('present') }}"
+  when:
+    - state == 'present'
+  notify:
+    - netplan apply
+  tags: [netplan]
+
+- name: cleanup netplan configuration
+  file:
+    path: "{{ netplan_config_dir }}/{{ filename }}"
+    state: absent
+  loop: "{{ netplan_fragments | dict2items }}"
+  vars:
+    filename: "{{ item.key }}"
+    state: "{{ item.value.state | default('present') }}"
+  when:
+    - state == 'absent'
+  notify:
+    - netplan apply
+  tags: [netplan]
