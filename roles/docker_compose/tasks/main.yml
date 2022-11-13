@@ -1,0 +1,15 @@
+---
+- name: gather ansible system facts
+  setup:
+    gather_subset: hardware
+  tags: [docker]
+
+- name: install docker-compose
+  become: true
+  get_url:
+    url: "{{ docker_compose_url }}"
+    dest: /usr/local/bin/docker-compose
+    owner: root
+    group: root
+    mode: 0755
+  tags: [docker, compose]

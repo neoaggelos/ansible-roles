@@ -11,6 +11,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `corosync`                | Setup a VIP resource using a Corosync cluster              | Ubuntu 18.04                  |
 | `disable_tracker`         | Disable GNOME Tracker                                      | Ubuntu                        |
 | `docker`                  | Install Docker and (optionally) Docker Compose             | Ubuntu, CentOS, Rocky, Debian |
+| `docker_compose`          | Install Docker Compose                                     | Ubuntu, CentOS, Rocky, Debian |
 | `etc_hosts`               | Configure entries in /etc/hosts                            | Ubuntu, CentOS, Rocky, Debian |
 | `hostname`                | Configure host name                                        | Ubuntu, CentOS, Rocky, Debian |
 | `k3s`                     | Configure a K3s cluster                                    | Ubuntu, CentOS, Rocky, Debian |
