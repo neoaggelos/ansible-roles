@@ -25,7 +25,7 @@
     mode: 0700
     owner: root
     group: root
-  when: vpn_preconfigure_ipp is defined and vpn_reconfigure_ip != ""
+  when: vpn_preconfigure_ipp is defined and vpn_preconfigure_ipp != ""
   tags: [openvpn, install]
 
 - name: configure vpn server
