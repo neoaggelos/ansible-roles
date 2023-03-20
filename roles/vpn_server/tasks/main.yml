@@ -6,7 +6,7 @@
     mode: 0700
     owner: root
     group: root
-  with_items: [/opt/openvpn, /opt/openvpn/clients]
+  with_items: [/etc/openvpn, /opt/openvpn, /opt/openvpn/clients]
   tags: [openvpn, init]
 
 - name: generate openvpn-install.sh
@@ -16,6 +16,16 @@
     mode: 0700
     owner: root
     group: root
+  tags: [openvpn, install]
+
+- name: configure openvpn ipp.txt
+  template:
+    src: openvpn-ipp.txt.j2
+    dest: /etc/openvpn/ipp.txt
+    mode: 0700
+    owner: root
+    group: root
+  when: vpn_preconfigure_ipp is defined and vpn_reconfigure_ip != ""
   tags: [openvpn, install]
 
 - name: configure vpn server

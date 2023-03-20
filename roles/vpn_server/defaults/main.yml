@@ -13,3 +13,12 @@ vpn_networks:
   mask: 255.255.255.0
 
 vpn_create_server_clients: false
+
+# Preconfigure IP assignments for client names.
+# This will be written at /etc/openvpn/ipp.txt if not empty. For example,
+#
+# vpn_preconfigure_ipp: |
+#   client-1 10.10.1.11
+#   client-2 10.10.1.12
+#   client-3 10.10.1.13
+vpn_preconfigure_ipp: ""
