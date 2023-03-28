@@ -1,0 +1,19 @@
+---
+- name: ensure timesyncd.conf.d config directory
+  file:
+    state: directory
+    path: "{{ systemd_timesyncd_conf_d }}"
+    owner: root
+    group: root
+    mode: 0755
+  tags: [systemd-timesyncd]
+
+- name: configure ntp server
+  template:
+    src: timesyncd.conf.j2
+    dest: "{{ systemd_timesyncd_conf_d }}/{{ systemd_timesyncd_file }}"
+  when:
+    - systemd_timesyncd_ntp|default("")
+  notify:
+    - restart systemd-timesyncd
+  tags: [systemd-timesyncd]

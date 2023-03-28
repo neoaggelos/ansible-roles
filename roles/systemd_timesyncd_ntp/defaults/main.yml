@@ -1,0 +1,5 @@
+---
+systemd_timesyncd_ntp: "ntp.ubuntu.com"
+
+systemd_timesyncd_conf_d: "/etc/systemd/timesyncd.conf.d"
+systemd_timesyncd_file: "10-ansible.conf"
