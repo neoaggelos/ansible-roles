@@ -127,13 +127,14 @@ def run_module():
 
     # image upstream source has changed, rename old image then create new one
     if image is not None and (not expected_image_size or expected_image_size != str(image.size)):
-        image, changed = None, True
         if rename_and_replace:
             # rename old image to "$name-$timestamp"
             c.image.update_image(image=image, name=f"{image.name}-{image.created_at}")
         elif update_and_replace:
             # delete old image and recreate it. the image ID will change
             c.image.delete_image(image=image)
+
+        image, changed = None, True
 
     if image is None:
         image = c.create_image(
