@@ -40,6 +40,11 @@ OPTIONS = {
         "required": False,
         "default": False,
     },
+    "update_and_replace": {
+        "type": "bool",
+        "required": False,
+        "default": False,
+    },
 }
 
 DOCUMENTATION = """
@@ -108,23 +113,27 @@ def run_module():
     disk_format = module.params["disk_format"]
     container_format = module.params["container_format"]
     rename_and_replace = module.params["rename_and_replace"]
+    update_and_replace = module.params["update_and_replace"]
     visibility = module.params["visibility"]
     metadata = module.params.get("metadata", {})
     changed = False
+
+    if rename_and_replace and update_and_replace:
+        module.fail_json("only one of renane_and_replace and update_and_replace may be set")
 
     c = openstack.connect()
     image = c.get_image(module.params["name"])
     expected_image_size = urllib.request.urlopen(image_url).headers.get("content-length")
 
     # image upstream source has changed, rename old image then create new one
-    if (
-        image is not None
-        and rename_and_replace
-        and (not expected_image_size or expected_image_size != str(image.size))
-    ):
-        c.image.update_image(image=image, name=f"{image.name}-{image.created_at}")
-        image = None
-        changed = True
+    if image is not None and (not expected_image_size or expected_image_size != str(image.size)):
+        image, changed = None, True
+        if rename_and_replace:
+            # rename old image to "$name-$timestamp"
+            c.image.update_image(image=image, name=f"{image.name}-{image.created_at}")
+        elif update_and_replace:
+            # delete old image and recreate it. the image ID will change
+            c.image.delete_image(image=image)
 
     if image is None:
         image = c.create_image(
