@@ -1,0 +1,31 @@
+# managed by Ansible
+
+[Interface]
+Address = {{ wireguard_peers[generate_client_name]['ip'] }}/{{ wireguard_subnet_size }}
+ListenPort = {{ wireguard_port }}
+PrivateKey = {{ wireguard_peers[generate_client_name]['privkey'] }}
+
+{% if 'endpoint' in wireguard_peers[generate_client_name] %}
+  {% for peer_name, peer in wireguard_peers.items() if peer_name != generate_client_name %}
+
+## Peer {{ peer_name }}
+[Peer]
+PublicKey = {{ wireguard_peers[peer_name]['pubkey'] }}
+AllowedIPs = {{ peer['ip'] }}/32{% for net in peer.get('networks') or [] %}, {{ net }}{% endfor %}
+{% if 'endpoint' in peer %}
+Endpoint = {{ peer['endpoint'] }}
+{% endif %}
+
+  {% endfor %}
+{% else %}
+  {% for peer_name, peer in wireguard_peers.items() if 'endpoint' in peer %}
+
+## Peer {{ peer_name }}
+[Peer]
+PublicKey = {{ wireguard_peers[peer_name]['pubkey'] }}
+Endpoint = {{ peer['endpoint'] }}
+PersistentKeepalive = {{ wireguard_persistent_keepalive }}
+AllowedIPs = {{ peer['ip'] }}/{{ wireguard_subnet_size }}{% for peer_name, peer in wireguard_peers.items() if peer_name != generate_client_name %}{% for net in peer.get('networks') or [] %}, {{ net }}{% endfor %}{% endfor %}
+
+  {% endfor %}
+{% endif %}

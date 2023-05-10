@@ -1,0 +1,51 @@
+---
+- name: install wireguard tools
+  # package:
+  #   name: wireguard-tools
+  apt:
+    name: wireguard-tools
+    update_cache: true
+    install_recommends: false
+  tags: [wireguard, install]
+
+- name: configure wireguard
+  template:
+    src: wg.conf.j2
+    dest: /etc/wireguard/{{ wireguard_interface }}.conf
+    owner: root
+    group: root
+    mode: 0400
+  vars:
+    generate_client_name: "{{ inventory_hostname }}"
+  notify: restart wireguard
+  tags: [wireguard, config]
+
+- name: configure wireguard clients
+  delegate_to: "{{ item.value['host'] }}"
+  template:
+    src: wg.conf.j2
+    dest: "{{ item.value['path'] }}"
+    owner: "{{ item.value['owner'] | default('root') }}"
+    group: "{{ item.value['owner'] | default('root') }}"
+    mode: 0400
+  loop: "{{ wireguard_clients | dict2items }}"
+  when:
+   - "'endpoint' in wireguard_peers[inventory_hostname]"
+  vars:
+    generate_client_name: "{{ item.key }}"
+
+- name: enable ipv4 forward for servers
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    reload: true
+  when:
+   - "'endpoint' in wireguard_peers[inventory_hostname]"
+  tags: [wireguard, sysctl]
+
+- name: enable wireguard
+  service:
+    name: wg-quick@{{ wireguard_interface }}
+    enabled: true
+  notify: restart wireguard
+  tags: [wireguard, service]
