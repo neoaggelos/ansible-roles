@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# managed by Ansible
+
+iptables -D INPUT -i {{ wireguard_interface }} -j ACCEPT
+iptables -D INPUT -p udp --dport {{ wireguard_port }} -j ACCEPT
+
+{% for network in wireguard_peers[inventory_hostname]['networks'] %}
+
+iptables -t nat -D POSTROUTING -s "{{ wireguard_peers[inventory_hostname]['ip'] }}/{{ wireguard_subnet_size }}" -d "{{ network }}" -j MASQUERADE
+{#
+    TODO(neoaggelos): forward rules from wireguard to host interface, e.g.
+
+    iptables -D FORWARD -i $NIC -o wg0 -j ACCEPT
+    iptables -D FORWARD -i wg0 -o $NIC -j ACCEPT
+#}
+
+{% endfor %}

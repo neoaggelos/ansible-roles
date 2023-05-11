@@ -43,6 +43,49 @@
    - "'endpoint' in wireguard_peers[inventory_hostname]"
   tags: [wireguard, sysctl]
 
+- name: ensure /etc/iptables exists
+  file:
+    path: /etc/iptables
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  when:
+    - "'networks' in wireguard_peers[inventory_hostname]"
+  tags: [wireguard, iptables]
+
+- name: generate iptables masquerade scripts for peer networks
+  template:
+    src: iptables-wg-{{ item }}.sh.j2
+    dest: /etc/iptables/iptables-wg-{{ item }}-{{ wireguard_interface }}.sh
+    mode: 0500
+    owner: root
+    group: root
+  loop: [up, down]
+  when:
+    - "'networks' in wireguard_peers[inventory_hostname]"
+  notify: apply iptables rules
+  tags: [wireguard, iptables]
+
+- name: configure iptables service
+  template:
+    src: iptables-wg@.service.j2
+    dest: /etc/systemd/system/iptables-wg@.service
+    mode: 0644
+    owner: root
+    group: root
+  when:
+    - "'networks' in wireguard_peers[inventory_hostname]"
+  tags: [wireguard, iptables]
+
+- name: enable iptables service
+  service:
+    name: iptables-wg@{{ wireguard_interface }}
+    enabled: true
+  when:
+    - "'networks' in wireguard_peers[inventory_hostname]"
+  tags: [wireguard, iptables]
+
 - name: enable wireguard
   service:
     name: wg-quick@{{ wireguard_interface }}

@@ -35,5 +35,6 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `xrdp`                    | Install xRDP with the XFCE4 desktop                        | Ubuntu                        |
 | `vpn_server`              | Configure OpenVPN server                                   | Ubuntu, CentOS, Debian        |
 | `vpn_client`              | Configure OpenVPN clients (used along with `vpn_server`)   | Ubuntu, CentOS, Debian        |
+| `wireguard`               | Configure WireGuard VPN                                    | Ubuntu                        |
 
 See `defaults.yml` for configuration for each role.

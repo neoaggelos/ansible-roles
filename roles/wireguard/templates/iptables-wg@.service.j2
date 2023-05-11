@@ -1,0 +1,13 @@
+[Unit]
+Description=iptables rules for WireGuard
+Before=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/iptables/iptables-wg-up-%i.sh
+ExecStop=/etc/iptables/iptables-wg-down-%i.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

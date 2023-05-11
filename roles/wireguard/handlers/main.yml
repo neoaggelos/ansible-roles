@@ -3,3 +3,6 @@
   service:
     name: wg-quick@{{ wireguard_interface }}
     state: restarted
+
+- name: apply iptables rules
+  shell: /etc/iptables/iptables-wg-up-{{ wireguard_interface }}.sh
