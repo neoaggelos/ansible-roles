@@ -129,7 +129,8 @@ def run_module():
     if image is not None and (not expected_image_size or expected_image_size != str(image.size)):
         if rename_and_replace:
             # rename old image to "$name-$timestamp"
-            c.image.update_image(image=image, name=f"{image.name}-{image.created_at}")
+            new_name = f"{image.name}-{image.created_at}".replace(":", "-")
+            c.image.update_image(image=image, name=new_name)
         elif update_and_replace:
             # delete old image and recreate it. the image ID will change
             c.image.delete_image(image=image)
