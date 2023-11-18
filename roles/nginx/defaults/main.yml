@@ -1,0 +1,30 @@
+---
+# nginx configuration paths
+nginx_dir: /etc/nginx
+nginx_static_root: /var/www/html
+nginx_conf_file: "{{ nginx_dir }}/nginx.conf"
+nginx_sites_available_dir: "{{ nginx_dir }}/sites-available"
+nginx_sites_enabled_dir: "{{ nginx_dir }}/sites-enabled"
+
+# path to nginx.conf template file (if empty, no config is changed)
+# nginx_conf_template: "{{ playbook_dir }}/templates/nginx/nginx.conf"
+nginx_conf_template: ""
+
+# list of nginx sites to configure in sites-available/
+# if enabled, a symlink is created on sites-enabled/, otherwise it is removed
+# nginx_sites:
+# - enabled: true
+#   name: 001-site1
+#   template: "{{ playbook_dir }}/templates/nginx/sites/site1.conf"
+nginx_sites: []
+
+# list of nginx static files to render under nginx_static_root
+# nginx_static_files:
+#   - name: index.html
+#     state: present
+#     template: "{{ playbook_dir }}/templates/nginx/static/index.html"
+#   - name: robots.txt
+#     template: "{{ playbook_dir }}/templates/nginx/static/robots.txt"
+#   - name: removethis
+#     state: absent
+nginx_static_files: []

@@ -1,0 +1,85 @@
+---
+- name: install nginx
+  package:
+    name: nginx
+    state: present
+  tags: [nginx, packages]
+
+- name: create static files
+  when: item.state | default('present') == 'present'
+  template:
+    src: "{{ item.template }}"
+    dest: "{{ nginx_static_root }}/{{ item.name }}"
+    mode: "{{ item.mode | default('0600') }}"
+    owner: "{{ item.owner | default('www-data') }}"
+    group: "{{ item.group | default('www-data') }}"
+  loop: "{{ nginx_static_files }}"
+  tags: [nginx, config]
+
+- name: remove absent static files
+  when: item.state | default('present') == 'absent'
+  file:
+    dest: "{{ nginx_static_root }}/{{ item.name }}"
+    state: absent
+  loop: "{{ nginx_static_files }}"
+  tags: [nginx, config]
+
+- name: configure nginx.conf
+  when: nginx_conf_template
+  template:
+    src: "{{ nginx_conf_template }}"
+    dest: "{{ nginx_conf_file }}"
+    mode: 0600
+    owner: root
+    group: root
+    validate: nginx -t -c %s
+  notify:
+    - reload nginx
+  tags: [nginx, config]
+
+- name: configure nginx sites
+  template:
+    src: "{{ item.template }}"
+    dest: "{{ nginx_sites_available_dir }}/{{ item.name }}"
+    mode: 0600
+    owner: root
+    group: root
+    validate: |
+      bash -c '
+        echo "events { worker_connections 200; } http { include %s; }" > /tmp/nginx.conf
+        sudo nginx -T -c /tmp/nginx.conf && rm -f /tmp/nginx.conf
+      '
+  loop: "{{ nginx_sites }}"
+  notify:
+    - reload nginx
+  tags: [nginx, config]
+
+- name: enable nginx sites
+  when: item.enabled | default(False)
+  file:
+    src: "{{ nginx_sites_available_dir }}/{{ item.name }}"
+    path: "{{ nginx_sites_enabled_dir }}/{{ item.name }}"
+    state: "{{ 'link' if (item.enabled | default(False)) else 'absent' }}"
+    mode: 0600
+    owner: root
+    group: root
+  loop: "{{ nginx_sites }}"
+  notify:
+    - reload nginx
+  tags: [nginx, config]
+
+- name: disable nginx sites
+  when: not (item.enabled | default(False))
+  file:
+    path: "{{ nginx_sites_enabled_dir }}/{{ item.name }}"
+    state: "absent"
+  loop: "{{ nginx_sites }}"
+  notify:
+    - reload nginx
+  tags: [nginx, config]
+
+- name: enable nginx service
+  service:
+    name: nginx
+    enabled: true
+  tags: [nginx, service]
