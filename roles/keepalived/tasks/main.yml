@@ -1,16 +1,19 @@
 ---
 - name: install keepalived
+  when: vip_address and vip_name and vip_interface
   package:
     name: keepalived
     state: present
   tags: [vip, keepalived, packages]
 
 - name: gather ansible network facts
+  when: vip_address and vip_name and vip_interface
   setup:
     gather_subset: network
   tags: [vip, keepalived, facts]
 
 - name: configure keepalived
+  when: vip_address and vip_name and vip_interface
   template:
     src: keepalived.conf.j2
     dest: /etc/keepalived/keepalived.conf
@@ -22,6 +25,7 @@
   tags: [vip, keepalived, config]
 
 - name: enable keepalived service
+  when: vip_address and vip_name and vip_interface
   service:
     name: keepalived
     enabled: true
