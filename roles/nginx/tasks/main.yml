@@ -24,19 +24,6 @@
   loop: "{{ nginx_static_files }}"
   tags: [nginx, config]
 
-- name: configure nginx.conf
-  when: nginx_conf_template
-  template:
-    src: "{{ nginx_conf_template }}"
-    dest: "{{ nginx_conf_file }}"
-    mode: 0600
-    owner: root
-    group: root
-    validate: nginx -t -c %s
-  notify:
-    - reload nginx
-  tags: [nginx, config]
-
 - name: configure nginx sites
   template:
     src: "{{ item.template }}"
@@ -82,6 +69,19 @@
     path: "{{ nginx_sites_enabled_dir }}/{{ item.name }}"
     state: "absent"
   loop: "{{ nginx_sites }}"
+  notify:
+    - reload nginx
+  tags: [nginx, config]
+
+- name: configure nginx.conf
+  when: nginx_conf_template
+  template:
+    src: "{{ nginx_conf_template }}"
+    dest: "{{ nginx_conf_file }}"
+    mode: 0600
+    owner: root
+    group: root
+    validate: nginx -t -c %s
   notify:
     - reload nginx
   tags: [nginx, config]
