@@ -40,7 +40,7 @@
 - name: configure nginx sites
   template:
     src: "{{ item.template }}"
-    dest: "{{ nginx_sites_available_dir }}/{{ item.name }}"
+    dest: "{{ nginx_sites_available_dir }}/{{ item.name }}.conf"
     mode: 0600
     owner: root
     group: root
@@ -57,8 +57,8 @@
 - name: enable nginx sites
   when: item.enabled | default(False)
   file:
-    src: "{{ nginx_sites_available_dir }}/{{ item.name }}"
-    path: "{{ nginx_sites_enabled_dir }}/{{ item.name }}"
+    src: "{{ nginx_sites_available_dir }}/{{ item.name }}.conf"
+    path: "{{ nginx_sites_enabled_dir }}/{{ item.name }}.conf"
     state: "{{ 'link' if (item.enabled | default(False)) else 'absent' }}"
     mode: 0600
     owner: root
