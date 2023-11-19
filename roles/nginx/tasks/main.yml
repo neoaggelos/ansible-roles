@@ -46,7 +46,15 @@
     group: root
     validate: |
       bash -c '
-        echo "events { worker_connections 200; } http { include %s; }" > /tmp/nginx.conf
+        echo "events { worker_connections 200; } http {
+          {% for var in item.assume_available_vars | default([]) %}
+          map \$http_host \${{ var }} { default value; }
+          {% endfor %}
+          {% for upstream in item.assume_available_upstreams | default([]) %}
+          upstream {{ upstream }} { server localhost:8080; }
+          {% endfor %}
+          include %s;
+        }" > /tmp/nginx.conf
         sudo nginx -T -c /tmp/nginx.conf && rm -f /tmp/nginx.conf
       '
   loop: "{{ nginx_sites }}"

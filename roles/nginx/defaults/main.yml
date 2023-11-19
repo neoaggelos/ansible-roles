@@ -16,6 +16,8 @@ nginx_conf_template: ""
 # - enabled: true
 #   name: 001-site1
 #   template: "{{ playbook_dir }}/templates/nginx/sites/site1.conf"
+#   assume_available_upstreams: [upstream_1, upstream_2]
+#   assume_available_vars: [var_1]
 nginx_sites: []
 
 # list of nginx static files to render under nginx_static_root
