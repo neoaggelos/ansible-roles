@@ -1,10 +1,13 @@
 ---
 # nginx configuration paths
 nginx_dir: /etc/nginx
-nginx_static_root: /var/www/html
 nginx_conf_file: "{{ nginx_dir }}/nginx.conf"
 nginx_sites_available_dir: "{{ nginx_dir }}/sites-available"
 nginx_sites_enabled_dir: "{{ nginx_dir }}/sites-enabled"
+nginx_htpasswd_dir: "{{ nginx_dir }}/htpasswd.d"
+
+# nginx static root
+nginx_static_root: /var/www/html
 
 # path to nginx.conf template file (if empty, no config is changed)
 # nginx_conf_template: "{{ playbook_dir }}/templates/nginx/nginx.conf"
@@ -30,3 +33,14 @@ nginx_sites: []
 #   - name: removethis
 #     state: absent
 nginx_static_files: []
+
+# list of basic auth htpasswd files to render under nginx_htpasswd_dir
+# nginx_htpasswd_files:
+#   - name: prometheus
+#     state: present
+#     template: "{{ playbook_dir }}/templates/nginx/htpasswd/prometheus"
+#   - name: grafana
+#     template: "{{ playbook_dir }}/templates/nginx/htpasswd/grafana"
+#   - name: removethis
+#     state: absent
+nginx_htpasswd_files: []

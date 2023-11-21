@@ -5,6 +5,21 @@
     state: present
   tags: [nginx, packages]
 
+- name: ensure nginx conf directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - "{{ nginx_dir }}"
+    - "{{ nginx_sites_available_dir }}"
+    - "{{ nginx_sites_enabled_dir }}"
+    - "{{ nginx_htpasswd_dir }}"
+    - "{{ nginx_static_root }}"
+  tags: [nginx, config]
+
 - name: create static files
   when: item.state | default('present') == 'present'
   template:
@@ -22,6 +37,25 @@
     dest: "{{ nginx_static_root }}/{{ item.name }}"
     state: absent
   loop: "{{ nginx_static_files }}"
+  tags: [nginx, config]
+
+- name: create htpasswd files
+  when: item.state | default('present') == 'present'
+  template:
+    src: "{{ item.template }}"
+    dest: "{{ nginx_htpasswd_dir }}/{{ item.name }}"
+    mode: "{{ item.mode | default('0644') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+  loop: "{{ nginx_htpasswd_files }}"
+  tags: [nginx, config]
+
+- name: remove absent htpasswd files
+  when: item.state | default('present') == 'absent'
+  file:
+    dest: "{{ nginx_htpasswd_dir }}/{{ item.name }}"
+    state: absent
+  loop: "{{ nginx_htpasswd_files }}"
   tags: [nginx, config]
 
 - name: configure nginx sites
