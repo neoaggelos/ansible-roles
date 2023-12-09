@@ -40,3 +40,12 @@
     line: PasswordAuthentication yes
   notify: restart sshd
   tags: [ssh, password_auth]
+
+- name: disable password authentication
+  when: not ssh_enable_password_auth
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: PasswordAuthentication yes
+    line: PasswordAuthentication no
+  notify: restart sshd
+  tags: [ssh, password_auth]
