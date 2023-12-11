@@ -1,10 +1,13 @@
 ---
 # cronjobs:
-# - crondef: "0 0 * * *"
+# - name: every midnight
+#   crondef: "0 0 * * *"
 #   command: echo hi every midnight
-# - crondef: "* * * * *"
+# - name: every minute
+#   crondef: "* * * * *"
 #   command: echo hi every minute
-# - crondef: "0 0 * * *"
+# - name: cron for other user
+#   crondef: "0 0 * * *"
 #   command: echo hi every midnight from user www-data
 #   user: www-data
 cronjobs: []

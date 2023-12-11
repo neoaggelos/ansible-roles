@@ -1,7 +1,7 @@
 ---
 - name: configure cron
   cron:
-    name: "{{ item.command }}"
+    name: "{{ item.name }}"
     job: "{{ item.command }}"
     minute: "{{ item.crondef.split(' ')[0] }}"
     hour: "{{ item.crondef.split(' ')[1] }}"
