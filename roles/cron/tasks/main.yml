@@ -1,0 +1,13 @@
+---
+- name: configure cron
+  cron:
+    name: "{{ item.command }}"
+    job: "{{ item.command }}"
+    minute: "{{ item.crondef.split(' ')[0] }}"
+    hour: "{{ item.crondef.split(' ')[1] }}"
+    day: "{{ item.crondef.split(' ')[2] }}"
+    month: "{{ item.crondef.split(' ')[3] }}"
+    weekday: "{{ item.crondef.split(' ')[4] }}"
+    user: "{{ item.user | default(omit) }}"
+  loop: "{{ cronjobs }}"
+  tags: [cron]
