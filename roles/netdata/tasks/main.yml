@@ -49,6 +49,8 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
   loop: "{{ netdata_conf_files }}"
+  notify:
+    - restart netdata
   tags: [netdata, config]
 
 - name: remove absent netdata conf files
@@ -57,4 +59,6 @@
     dest: "{{ netdata_conf_dir }}/{{ item.name }}"
     state: absent
   loop: "{{ netdata_conf_files }}"
+  notify:
+    - restart netdata
   tags: [netdata, config]
