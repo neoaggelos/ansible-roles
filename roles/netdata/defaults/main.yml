@@ -1,6 +1,7 @@
 ---
 netdata_add_repository_script: https://packagecloud.io/install/repositories/netdata/netdata/script.deb.sh
 
+netdata_conf_dir: /etc/netdata
 netdata_conf: |
   [global]
     bind socket to IP = localhost
@@ -9,3 +10,13 @@ netdata_conf: |
 netdata_slack_notifications_enabled: false
 netdata_slack_webhook_url: "https://hooks.slack.com/services/AAAAAAAA/BBBBBBBB/CCCCCCCCCCCCCCCCCCCCCC"
 netdata_slack_webhook_recepient: "#channel-name"
+
+# list of managed netdata configuration files
+# netdata_conf_files:
+#   - name: go.d.conf
+#     template: "{{ playbook_dir }}/templates/go.d.conf"
+#   - name: go.d/httpcheck.conf
+#     template: "{{ playbook_dir }}/templates/go.d/httpcheck.conf"
+#   - name: toremove.conf
+#     state: absent
+netdata_conf_files: []
