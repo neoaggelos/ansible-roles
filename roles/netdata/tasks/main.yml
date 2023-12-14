@@ -24,9 +24,9 @@
   template:
     src: health_alarm_notify.conf.j2
     dest: "{{ netdata_conf_dir }}/health_alarm_notify.conf"
-    mode: 0640
+    mode: "0640"
     owner: root
-    group: root
+    group: netdata
   notify:
     - restart netdata
   tags: [netdata, config]
@@ -47,7 +47,7 @@
     dest: "{{ netdata_conf_dir }}/{{ item.name }}"
     mode: "{{ item.mode | default('0640') }}"
     owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
+    group: "{{ item.group | default('netdata') }}"
   loop: "{{ netdata_conf_files }}"
   notify:
     - restart netdata
