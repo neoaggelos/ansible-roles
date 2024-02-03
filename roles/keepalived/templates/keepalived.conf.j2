@@ -1,3 +1,5 @@
+{# BEGIN deprecated single vip configuration #}
+{% if vip_name %}
 vrrp_instance {{ vip_name }} {
 	state BACKUP
 	nopreempt
@@ -13,3 +15,23 @@ vrrp_instance {{ vip_name }} {
 		auth_pass {{ keepalived_auth_pass }}
 	}
 }
+{% endif %}
+{# END deprecated single vip configuration #}
+
+{% for vip in keepalived_vips %}
+vrrp_instance {{ vip.name }} {
+	nopreempt
+	state {{ vip.state | default("BACKUP") }}
+	interface {{ vip.interface }}
+	virtual_router_id {{ vip.virtual_router_id | default(keepalived_virtual_router_id) }}
+	priority {{ vip.priority | default(keepalived_priority) }}
+	advert_int 1
+	virtual_ipaddress {
+		{{ vip.address }}
+	}
+	authentication {
+		auth_type PASS
+		auth_pass {{ vip.auth_pass|default(keepalived_auth_pass) }}
+	}
+}
+{% endfor %}

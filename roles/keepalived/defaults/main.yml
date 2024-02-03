@@ -1,11 +1,30 @@
 ---
+# list of vips to configure.
+# keepalived_vips:
+#   - name: vip-1
+#     address: "10.10.10.100"
+#     interface: "{{ ansible_default_ipv4.interface }}"
+#   - name: vip-override-all
+#     address: "10.10.10.100"
+#     interface: "{{ ansible_default_ipv4.interface }}"
+#     state: MASTER
+#     priority: "100"
+#     virtual_router_id: 152
+#     auth_pass: '0123567'
+keepalived_vips: []
+
+# default auth_pass for vips
 keepalived_auth_pass: '0123467'
+
+# default router ID for vips
 keepalived_virtual_router_id: 151
+
+# default priority for vips
 keepalived_priority: 100
 
+# [deprecated] vip name, address and interface
 # vip_name: "vip-1"
 # vip_address: "10.10.10.100", or specify subnet size as well "10.10.10.100/24"
 vip_name: ""
 vip_address: ""
-
 vip_interface: "{{ ansible_default_ipv4.interface }}"
