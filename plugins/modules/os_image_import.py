@@ -123,6 +123,13 @@ def run_module():
 
     c = openstack.connect()
     image = c.get_image(module.params["name"])
+
+    # NOTE(neoaggelos/2024-09-03): Some servers return HTTP 403 for the default Python user-agent, use curl/7.81.0 instead.
+    # Verify with:
+    #   $ curl https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-latest.x86_64.qcow2 -A Python-urllib/3.10    -> HTTP 403 -- error 1010
+    #   $ curl https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-latest.x86_64.qcow2                          -> works
+    req = urllib.request.Request(image_url)
+    req.add_header("user-agent", "curl/7.81.0")
     expected_image_size = urllib.request.urlopen(image_url).headers.get("content-length")
 
     # image upstream source has changed, rename old image then create new one
