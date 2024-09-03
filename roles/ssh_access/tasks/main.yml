@@ -38,7 +38,7 @@
     dest: /etc/ssh/sshd_config
     regexp: PasswordAuthentication no
     line: PasswordAuthentication yes
-  notify: restart sshd
+  notify: restart ssh
   tags: [ssh, password_auth]
 
 - name: disable password authentication
@@ -47,5 +47,5 @@
     dest: /etc/ssh/sshd_config
     regexp: PasswordAuthentication yes
     line: PasswordAuthentication no
-  notify: restart sshd
+  notify: restart ssh
   tags: [ssh, password_auth]
