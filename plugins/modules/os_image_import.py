@@ -130,7 +130,7 @@ def run_module():
     #   $ curl https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-latest.x86_64.qcow2                          -> works
     req = urllib.request.Request(image_url)
     req.add_header("user-agent", "curl/7.81.0")
-    expected_image_size = urllib.request.urlopen(image_url).headers.get("content-length")
+    expected_image_size = urllib.request.urlopen(req).headers.get("content-length")
 
     # image upstream source has changed, rename old image then create new one
     if image is not None and (not expected_image_size or expected_image_size != str(image.size)):
