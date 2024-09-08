@@ -1,0 +1,13 @@
+---
+apt_conf_dir: /etc/apt/apt.conf.d
+apt_http_proxy_conf_priority: 95
+apt_http_proxy_conf: "{{ apt_conf_dir }}/{{ apt_http_proxy_conf_priority }}-ansible-proxy"
+
+apt_ftp_proxy: ""
+apt_http_proxy: ""
+apt_https_proxy: ""
+
+apt_http_proxy_template: |
+  Acquire::ftp::Proxy "{{ apt_ftp_proxy }}";
+  Acquire::http::Proxy "{{ apt_http_proxy }}";
+  Acquire::https::Proxy "{{ apt_https_proxy }}";

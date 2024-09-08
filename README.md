@@ -8,6 +8,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | ------------------------- | ---------------------------------------------------------- | ----------------------------- |
 | `apt_cacher`              | Setup a caching apt proxy                                  | Ubuntu                        |
 | `apt_cacher_ng`           | Setup a caching apt proxy                                  | Ubuntu                        |
+| `apt_http_proxy`          | Configure apt proxy for http, https, ftp                   | Ubuntu, Debian                |
 | `corosync`                | Setup a VIP resource using a Corosync cluster              | Ubuntu 18.04                  |
 | `cron`                    | Setup cronjobs for system users                            | Ubuntu, CentOS, Rocky, Debian |
 | `disable_tracker`         | Disable GNOME Tracker                                      | Ubuntu                        |
