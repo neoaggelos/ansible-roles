@@ -1,6 +1,12 @@
 ---
+# on/off switch
 etchosts_configure: true
+
+# include self in the /etc/hosts entries
 etchosts_add_self: true
+
+# remove .ssh/known_hosts files after updating /etc/hosts on the machine
+etchosts_clean_known_hosts: false
 
 etchosts: |
   {% for host in groups['all'] | sort %}

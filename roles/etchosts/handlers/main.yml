@@ -1,4 +1,5 @@
 - name: clean known hosts
+  when: etchosts_clean_known_hosts
   file:
     path: "{{ item }}"
     state: absent
