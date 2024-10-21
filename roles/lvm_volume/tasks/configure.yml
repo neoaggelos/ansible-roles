@@ -22,6 +22,7 @@
 
 - name: create filesystem
   filesystem:
+    resizefs: "{{ item.resizefs | default(False) | bool }}"
     dev: "/dev/{{ item.key }}/{{ item.value.lvname | default(volume_lvname) }}"
     fstype: ext4
   loop: "{{ volume_groups[inventory_hostname] | dict2items }}"
