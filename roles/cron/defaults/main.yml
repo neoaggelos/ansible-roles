@@ -10,4 +10,11 @@
 #   crondef: "0 0 * * *"
 #   command: echo hi every midnight from user www-data
 #   user: www-data
+# - name: cron with command saved in file
+#   crondef: "0 0 * * *"
+#   user: ubuntu
+#   command: |
+#     #!/bin/bash -xe
+#     echo test $(date) >> /tmp/logs
+#   file: /opt/backup.sh
 cronjobs: []

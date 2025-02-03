@@ -1,8 +1,19 @@
 ---
+- name: configure cron script files
+  template:
+    src: cron-template.j2
+    dest: "{{ item.file }}"
+    owner: "{{ item.user | default(omit) }}"
+    group: "{{ item.user | default(omit) }}"
+    mode: "0700"
+  when: item.file | default(false)
+  loop: "{{ cronjobs }}"
+  tags: [cron]
+
 - name: configure cron
   cron:
     name: "{{ item.name }}"
-    job: "{{ item.command }}"
+    job: "{{ item.file | default(item.command) }}"
     minute: "{{ item.crondef.split(' ')[0] }}"
     hour: "{{ item.crondef.split(' ')[1] }}"
     day: "{{ item.crondef.split(' ')[2] }}"
