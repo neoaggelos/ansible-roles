@@ -22,6 +22,7 @@
     groups: "{{ item.groups | default([ ]) | join(',') | default(omit) }}"
     name: "{{ item.name }}"
     password: "{{ item.password | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
     shell: /bin/bash
   with_items: "{{ users_and_groups.users }}"
   when:
