@@ -5,3 +5,9 @@ apt_cacher_ng_config_file: /etc/apt-cacher-ng/acng.conf
 
 apt_cacher_ng_configs:
   PassThroughPattern: "{{ apt_cacher_ng_passthrough_pattern }}"
+
+  # # clients can use
+  # # $ curl https://download.docker.com/linux/ubuntu/gpg > /etc/apt/keyrings/docker.asc
+  # # $ echo 'deb [signed-by=/etc/apt/keyrings/docker.asc] http://proxy.w00.docker jammy stable' > /etc/apt/sources.list.d/docker.list
+  # # $ sudo apt update
+  # Remap-docker: http://proxy.w00.docker ; https://download.docker.com/linux/ubuntu
