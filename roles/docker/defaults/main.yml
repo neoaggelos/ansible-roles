@@ -13,3 +13,7 @@ docker_packages:
 
 docker_compose_version: 2.2.2
 docker_compose_url: https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_machine }}
+
+# docker_daemon_config_json: |
+#   {"bridge": "none", "ip-forward": false, "iptables": false}
+docker_daemon_config_json: ""

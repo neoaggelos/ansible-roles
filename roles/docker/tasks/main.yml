@@ -4,6 +4,27 @@
     gather_subset: hardware
   tags: [docker]
 
+- name: ensure docker daemon configuration directory
+  file:
+    path: /etc/docker
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: docker_daemon_config_json
+  tags: [docker]
+
+- name: configure docker daemon.json
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: "0644"
+  when: docker_daemon_config_json
+  notify: restart docker
+  tags: [docker]
+
 - name: install docker for ubuntu/debian
   when: ansible_distribution in ['Ubuntu', 'Debian']
   include_tasks: debian.yml
