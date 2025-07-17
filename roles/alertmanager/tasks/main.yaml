@@ -9,7 +9,7 @@
 
 - name: ensure alertmanager image
   command:
-    cmd: docker pull {{ alertmanager_image | quote }}
+    cmd: sudo docker pull {{ alertmanager_image | quote }}
   tags: [alertmanager]
 
 - name: render docker-compose

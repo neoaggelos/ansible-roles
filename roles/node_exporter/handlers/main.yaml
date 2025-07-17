@@ -1,4 +1,4 @@
 - name: restart node exporter
   command:
-    cmd: docker-compose up -d --force-recreate
+    cmd: sudo docker-compose up -d --force-recreate
     chdir: "{{ node_exporter_dir }}"

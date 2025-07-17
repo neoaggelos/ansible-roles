@@ -1,4 +1,4 @@
 - name: restart blackbox exporter
   command:
-    cmd: docker-compose up -d --force-recreate
+    cmd: sudo docker-compose up -d --force-recreate
     chdir: "{{ blackbox_exporter_dir }}"
