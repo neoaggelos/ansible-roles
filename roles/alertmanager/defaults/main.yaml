@@ -17,3 +17,12 @@ alertmanager_config_template: alertmanager.yaml
 # - --web.route-prefix=/alertmanager/
 # - --web.external-url=https://example.com/alertmanager/
 alertmanager_extra_args: []
+
+# alertmanager_validate_config_cmd is used to validate config files (replaced by %s)
+# set to empty string to disable validation.
+#
+# alertmanager_validate_config_cmd: ""
+alertmanager_validate_config_cmd: |
+  bash -c '
+    cat %s | docker run --rm -i --entrypoint /bin/amtool {{ alertmanager_image | quote }} check-config
+  '

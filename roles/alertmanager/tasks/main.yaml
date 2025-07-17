@@ -7,6 +7,11 @@
     group: root
   tags: [alertmanager]
 
+- name: ensure alertmanager image
+  command:
+    cmd: docker pull {{ alertmanager_image | quote }}
+  tags: [alertmanager]
+
 - name: render docker-compose
   template:
     src: "{{ alertmanager_docker_compose_template }}"
@@ -24,6 +29,7 @@
     mode: "0400"
     owner: "{{ alertmanager_run_as_user }}"
     group: "{{ alertmanager_run_as_user }}"
+    validate: "{{ alertmanager_validate_config_cmd }}"
   notify: restart alertmanager
   tags: [alertmanager]
 
