@@ -4,7 +4,7 @@ mysqld_exporter_image: quay.io/prometheus/mysqld-exporter:v0.17.2
 
 # runtime configuration
 mysqld_exporter_dir: /opt/mysqld-exporter
-mysqld_exporter_web_listen_address: "{{ ansible_host }}:9104"
+mysqld_exporter_web_listen_address: ":9104"
 mysqld_exporter_run_as_user: "9104"
 
 # allow overriding config templates

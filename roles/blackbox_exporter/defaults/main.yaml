@@ -4,7 +4,7 @@ blackbox_exporter_image: quay.io/prometheus/blackbox-exporter:v0.27.0
 
 # runtime configuration
 blackbox_exporter_dir: /opt/blackbox-exporter
-blackbox_exporter_web_listen_address: "{{ ansible_host }}:9115"
+blackbox_exporter_web_listen_address: ":9115"
 blackbox_exporter_run_as_user: "9115"
 
 # allow overriding config templates
