@@ -1,0 +1,4 @@
+- name: restart alertmanager
+  command:
+    cmd: docker-compose up -d --force-recreate
+    chdir: "{{ alertmanager_dir }}"

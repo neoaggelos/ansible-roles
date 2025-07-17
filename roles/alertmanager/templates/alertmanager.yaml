@@ -1,0 +1,6 @@
+#
+# Ansible managed
+#
+
+global:
+  resolve_timeout: 3m

@@ -1,0 +1,37 @@
+- name: ensure directory
+  file:
+    state: directory
+    path: "{{ alertmanager_dir }}"
+    mode: "0755"
+    owner: root
+    group: root
+  tags: [alertmanager]
+
+- name: render docker-compose
+  template:
+    src: "{{ alertmanager_docker_compose_template }}"
+    dest: "{{ alertmanager_dir }}/docker-compose.yaml"
+    mode: "0644"
+    owner: root
+    group: root
+  notify: restart alertmanager
+  tags: [alertmanager]
+
+- name: render alertmanager configuration
+  template:
+    src: "{{ alertmanager_config_template }}"
+    dest: "{{ alertmanager_dir }}/config.yaml"
+    mode: "0400"
+    owner: "{{ alertmanager_run_as_user }}"
+    group: "{{ alertmanager_run_as_user }}"
+  notify: restart alertmanager
+  tags: [alertmanager]
+
+- name: create alertmanager data dir
+  file:
+    state: directory
+    path: "{{ alertmanager_dir }}/data"
+    mode: "0755"
+    owner: "{{ alertmanager_run_as_user }}"
+    group: "{{ alertmanager_run_as_user }}"
+  tags: [alertmanager]

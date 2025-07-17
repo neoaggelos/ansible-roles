@@ -1,0 +1,19 @@
+---
+# alertmanager version
+alertmanager_image: quay.io/prometheus/alertmanager:v0.28.1
+
+# runtime configuration
+alertmanager_dir: /opt/alertmanager
+alertmanager_web_listen_address: ":9093"
+alertmanager_run_as_user: "9093"
+
+# allow overriding config templates
+alertmanager_docker_compose_template: docker-compose.yaml.j2
+alertmanager_config_template: alertmanager.yaml
+
+# alertmanager_extra_args are passed to the alertmanager binary
+#
+# alertmanager_extra_args:
+# - --web.route-prefix=/alertmanager/
+# - --web.external-url=https://example.com/alertmanager/
+alertmanager_extra_args: []
