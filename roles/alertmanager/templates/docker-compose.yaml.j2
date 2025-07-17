@@ -7,6 +7,7 @@ services:
     - --web.listen-address={{ alertmanager_web_listen_address }}
     - --config.file=/config.yaml
     - --storage.path=/var/lib/alertmanager
+    - --cluster.listen-address=
 {% for arg in alertmanager_extra_args %}
     - {{ arg }}
 {% endfor %}
