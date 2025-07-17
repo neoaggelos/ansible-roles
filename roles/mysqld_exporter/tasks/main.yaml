@@ -1,0 +1,28 @@
+- name: ensure configuration directory
+  file:
+    state: directory
+    path: "{{ mysqld_exporter_dir }}"
+    mode: "0755"
+    owner: root
+    group: root
+  tags: [mysqld_exporter]
+
+- name: render docker-compose
+  template:
+    src: "{{ mysqld_exporter_docker_compose_template }}"
+    dest: "{{ mysqld_exporter_dir }}/docker-compose.yaml"
+    mode: "0644"
+    owner: root
+    group: root
+  notify: restart mysqld exporter
+  tags: [mysqld_exporter]
+
+- name: render mysqld-exporter configuration
+  template:
+    src: "{{ mysqld_exporter_config_template }}"
+    dest: "{{ mysqld_exporter_dir }}/my.cnf"
+    mode: "0400"
+    owner: "{{ mysqld_exporter_run_as_user }}"
+    group: "{{ mysqld_exporter_run_as_user }}"
+  notify: restart mysqld exporter
+  tags: [mysqld_exporter]

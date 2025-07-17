@@ -1,0 +1,28 @@
+- name: ensure directory
+  file:
+    state: directory
+    path: "{{ blackbox_exporter_dir }}"
+    mode: "0755"
+    owner: root
+    group: root
+  tags: [blackbox_exporter]
+
+- name: render docker-compose
+  template:
+    src: "{{ blackbox_exporter_docker_compose_template }}"
+    dest: "{{ blackbox_exporter_dir }}/docker-compose.yaml"
+    mode: "0644"
+    owner: root
+    group: root
+  notify: restart blackbox exporter
+  tags: [blackbox_exporter]
+
+- name: render blackbox-exporter configuration
+  template:
+    src: "{{ blackbox_exporter_config_template }}"
+    dest: "{{ blackbox_exporter_dir }}/config.yaml"
+    mode: "0400"
+    owner: "{{ blackbox_exporter_run_as_user }}"
+    group: "{{ blackbox_exporter_run_as_user }}"
+  notify: restart blackbox exporter
+  tags: [blackbox_exporter]

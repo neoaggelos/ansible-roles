@@ -9,6 +9,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `apt_cacher`              | Setup a caching apt proxy                                  | Ubuntu                        |
 | `apt_cacher_ng`           | Setup a caching apt proxy                                  | Ubuntu                        |
 | `apt_http_proxy`          | Configure apt proxy for http, https, ftp                   | Ubuntu, Debian                |
+| `blackbox_exporter`       | Configure blackbox exporter (requires docker_compose)      | Ubuntu, CentOS, Rocky, Debian |
 | `corosync`                | Setup a VIP resource using a Corosync cluster              | Ubuntu 18.04                  |
 | `cron`                    | Setup cronjobs for system users                            | Ubuntu, CentOS, Rocky, Debian |
 | `disable_tracker`         | Disable GNOME Tracker                                      | Ubuntu                        |
@@ -21,11 +22,13 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `kernel_modules_disable`  | Disable and blacklist Kernel modules                       | Ubuntu, CentOS, Rocky, Debian |
 | `lvm_volume`              | Configure LVM volume group and logical volumes             | Ubuntu, CentOS, Rocky, Debian |
 | `microk8s`                | Configure a MicroK8s cluster                               | Ubuntu, CentOS, Rocky, Debian |
+| `mysqld_exporter`         | Configure mysqld exporter (requires docker_compose)        | Ubuntu, CentOS, Rocky, Debian |
 | `netdata`                 | Configure netdata (and optional Slack alerts)              | Ubuntu                        |
 | `netplan`                 | Configure netplan                                          | Ubuntu, CentOS, Rocky, Debian |
 | `nginx`                   | Configure NGINX server, static files and servers           | Ubuntu, CentOS, Rocky, Debian |
 | `nfs`                     | Configure NFS server and clients                           | Ubuntu, CentOS, Rocky, Debian |
 | `nmcli`                   | Configure a NetworkManager connection using nmcli          | Ubuntu                        |
+| `node_exporter`           | Configure node exporter (requires docker_compose)          | Ubuntu, CentOS, Rocky, Debian |
 | `node_exporter_text_file` | Configure text file exporters for Node Exporter            | Ubuntu, CentOS, Rocky, Debian |
 | `openstack_cloud`         | Bootstrap configuration for an OpenStack cloud             | `OpenStack`                   |
 | `rke`                     | Configure a RKE cluster                                    | Ubuntu, CentOS, Rocky, Debian |

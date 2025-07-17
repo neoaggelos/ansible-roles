@@ -1,0 +1,14 @@
+---
+services:
+  mysqld-exporter:
+    container_name: mysqld_exporter
+    image: {{ mysqld_exporter_image }}
+    command:
+    - --web.listen-address={{ mysqld_exporter_web_listen_address }}
+    - --config.my-cnf=/my.cnf
+    network_mode: host
+    read_only: true
+    user: "{{ mysqld_exporter_run_as_user }}"
+    volumes:
+      - ./my.cnf:/my.cnf:ro
+    restart: always

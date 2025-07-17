@@ -1,0 +1,14 @@
+---
+services:
+  blackbox-exporter:
+    container_name: blackbox_exporter
+    image: {{ blackbox_exporter_image }}
+    command:
+    - --web.listen-address={{ blackbox_exporter_web_listen_address }}
+    - --config.file=/config.yaml
+    network_mode: host
+    read_only: true
+    restart: always
+    user: "{{ blackbox_exporter_run_as_user }}"
+    volumes:
+      - ./config.yaml:/config.yaml:ro

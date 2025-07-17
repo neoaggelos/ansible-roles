@@ -1,0 +1,18 @@
+- name: ensure configuration directory
+  file:
+    state: directory
+    path: "{{ node_exporter_dir }}"
+    mode: "0755"
+    owner: root
+    group: root
+  tags: [node_exporter]
+
+- name: render docker-compose
+  template:
+    src: "{{ node_exporter_docker_compose_template }}"
+    dest: "{{ node_exporter_dir }}/docker-compose.yaml"
+    mode: "0644"
+    owner: root
+    group: root
+  notify: restart node exporter
+  tags: [node_exporter]

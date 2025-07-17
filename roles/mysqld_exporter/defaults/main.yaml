@@ -1,0 +1,20 @@
+---
+# mysqld exporter version
+mysqld_exporter_image: quay.io/prometheus/mysqld-exporter:v0.17.2
+
+# runtime configuration
+mysqld_exporter_dir: /opt/mysqld-exporter
+mysqld_exporter_web_listen_address: "{{ ansible_host }}:9104"
+mysqld_exporter_run_as_user: "9104"
+
+# allow overriding config templates
+mysqld_exporter_docker_compose_template: docker-compose.yaml.j2
+mysqld_exporter_config_template: my.cnf
+
+# mysqld exporter configurations (empty "" is default client)
+#
+# mysqld_exporter_client_auth_modules:
+#   "":
+#     user: username
+#     password: password
+mysqld_exporter_client_auth_modules: {}

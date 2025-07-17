@@ -1,0 +1,4 @@
+- name: restart mysqld exporter
+  command:
+    cmd: docker-compose up -d --force-recreate
+    chdir: "{{ mysqld_exporter_dir }}"

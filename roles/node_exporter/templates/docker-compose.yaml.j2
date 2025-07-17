@@ -1,0 +1,26 @@
+---
+services:
+  node-exporter:
+    container_name: node_exporter
+    image: {{ node_exporter_image }}
+    command:
+    - --web.listen-address={{ node_exporter_web_listen_address }}
+    - --path.rootfs=/host
+{% if node_exporter_enable_systemd_collector %}
+    - --collector.systemd
+{% endif %}
+    pid: host
+    network_mode: host
+    read_only: true
+    restart: always
+{% if node_exporter_enable_systemd_collector %}
+    user: "0"
+{% else %}
+    user: "{{ node_exporter_run_as_user }}"
+{% endif %}
+    volumes:
+      - /:/host:ro,rslave
+{% if node_exporter_enable_systemd_collector %}
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
+      - /run/systemd/private:/run/systemd/private:ro
+{% endif %}
