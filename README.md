@@ -6,6 +6,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 
 | Role                      | Description                                                | Support                       |
 | ------------------------- | ---------------------------------------------------------- | ----------------------------- |
+| `alertmanager`            | Configure alertmanager (requires docker_compose)           | Ubuntu, CentOS, Rocky, Debian |
 | `apt_cacher`              | Setup a caching apt proxy                                  | Ubuntu                        |
 | `apt_cacher_ng`           | Setup a caching apt proxy                                  | Ubuntu                        |
 | `apt_http_proxy`          | Configure apt proxy for http, https, ftp                   | Ubuntu, Debian                |

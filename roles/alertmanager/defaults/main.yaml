@@ -24,5 +24,5 @@ alertmanager_extra_args: []
 # alertmanager_validate_config_cmd: ""
 alertmanager_validate_config_cmd: |
   bash -c '
-    cat %s | docker run --rm -i --entrypoint /bin/amtool {{ alertmanager_image | quote }} check-config
+    cat %s | sudo docker run --rm -i --entrypoint /bin/amtool {{ alertmanager_image | quote }} check-config
   '
