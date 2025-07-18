@@ -1,0 +1,75 @@
+- name: ensure directory
+  file:
+    state: directory
+    path: "{{ prometheus_dir }}"
+    mode: "0755"
+    owner: root
+    group: root
+  tags: [prometheus, config, rules]
+
+- name: ensure prometheus image
+  command:
+    cmd: sudo docker pull {{ prometheus_image | quote }}
+  register: docker_pull
+  changed_when: "'Downloaded newer image' in docker_pull.stdout"
+  tags: [prometheus, config, rules]
+
+- name: render docker-compose
+  template:
+    src: "{{ prometheus_docker_compose_template }}"
+    dest: "{{ prometheus_dir }}/docker-compose.yaml"
+    mode: "0644"
+    owner: root
+    group: root
+  notify: restart prometheus
+  tags: [prometheus, config]
+
+- name: create prometheus data dir
+  file:
+    state: directory
+    path: "{{ prometheus_dir }}/data"
+    mode: "0755"
+    owner: "{{ prometheus_run_as_user }}"
+    group: "{{ prometheus_run_as_user }}"
+  tags: [prometheus]
+
+- name: create prometheus config dir
+  file:
+    state: directory
+    path: "{{ prometheus_dir }}/config"
+    mode: "0755"
+    owner: "{{ prometheus_run_as_user }}"
+    group: "{{ prometheus_run_as_user }}"
+  tags: [prometheus, config, rules]
+
+- name: create prometheus rules dir
+  file:
+    state: directory
+    path: "{{ prometheus_dir }}/config/rules"
+    mode: "0755"
+    owner: "{{ prometheus_run_as_user }}"
+    group: "{{ prometheus_run_as_user }}"
+  tags: [prometheus, rules]
+
+- name: render prometheus configuration
+  template:
+    src: "{{ prometheus_config_template }}"
+    dest: "{{ prometheus_dir }}/config/prometheus.yaml"
+    mode: "0400"
+    owner: "{{ prometheus_run_as_user }}"
+    group: "{{ prometheus_run_as_user }}"
+    validate: "{{ prometheus_validate_config_cmd }}"
+  notify: reload prometheus
+  tags: [prometheus, config]
+
+- name: copy prometheus rules
+  copy:
+    src: "{{ item }}"
+    dest: "{{ prometheus_dir }}/config/rules/"
+    mode: "0400"
+    owner: "{{ prometheus_run_as_user }}"
+    group: "{{ prometheus_run_as_user }}"
+    validate: "{{ prometheus_validate_rules_cmd }}"
+  with_fileglob: "{{ prometheus_alert_rules_files }}"
+  notify: reload prometheus
+  tags: [prometheus, rules]

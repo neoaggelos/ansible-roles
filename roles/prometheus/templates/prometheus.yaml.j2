@@ -1,0 +1,24 @@
+#
+# Ansible managed
+#
+# http://prometheus.io/docs/operating/configuration/
+
+global:
+  evaluation_interval: 15s
+  scrape_interval: 15s
+  scrape_timeout: 10s
+
+  external_labels:
+    {{ prometheus_external_labels | to_nice_yaml(indent=4) | indent(4, False) }}
+
+rule_files:
+  - /etc/prometheus/rules/*.rules
+
+{% if prometheus_alertmanager_configs %}
+alerting:
+  alertmanagers:
+  {{ prometheus_alertmanager_configs | to_nice_yaml(indent=2) | indent(2, False) }}
+{% endif %}
+
+scrape_configs:
+{{ prometheus_scrape_configs | to_nice_yaml(indent=2) }}

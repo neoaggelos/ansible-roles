@@ -32,6 +32,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `node_exporter`           | Configure node exporter (requires docker_compose)          | Ubuntu, CentOS, Rocky, Debian |
 | `node_exporter_text_file` | Configure text file exporters for Node Exporter            | Ubuntu, CentOS, Rocky, Debian |
 | `openstack_cloud`         | Bootstrap configuration for an OpenStack cloud             | `OpenStack`                   |
+| `prometheus`              | Configure prometheus (requires docker_compose)             | Ubuntu, CentOS, Rocky, Debian |
 | `rke`                     | Configure a RKE cluster                                    | Ubuntu, CentOS, Rocky, Debian |
 | `rke2`                    | Configure a RKE2 cluster                                   | Ubuntu, CentOS, Rocky, Debian |
 | `ssh_access`              | Configure SSH access across machines of the same inventory | Ubuntu, CentOS, Rocky, Debian |

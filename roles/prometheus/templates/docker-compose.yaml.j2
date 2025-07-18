@@ -1,0 +1,18 @@
+---
+services:
+  prometheus:
+    container_name: prometheus
+    image: {{ prometheus_image }}
+    command:
+    - --web.listen-address={{ prometheus_web_listen_address }}
+    - --config.file=/etc/prometheus/prometheus.yaml
+    - --storage.tsdb.path=/var/lib/prometheus
+{% for arg in prometheus_extra_args %}
+    - {{ arg }}
+{% endfor %}
+    network_mode: host
+    restart: always
+    user: "{{ prometheus_run_as_user }}"
+    volumes:
+      - ./config:/etc/prometheus:ro
+      - ./data:/var/lib/prometheus
