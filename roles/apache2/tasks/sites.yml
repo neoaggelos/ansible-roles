@@ -1,0 +1,50 @@
+---
+- name: configure apache2 sites
+  template:
+    src: "{{ item.template }}"
+    dest: "{{ apache2_sites_available_dir }}/{{ item.name }}.conf"
+    mode: 0600
+    owner: root
+    group: root
+    # TODO(neoaggelos): implement validation before copying config file
+    # validate: |
+    #   bash -c '
+    #     echo "events { worker_connections 200; } http {
+    #       {% for var in item.assume_available_vars | default([]) %}
+    #       map \$http_host \${{ var }} { default value; }
+    #       {% endfor %}
+    #       {% for upstream in item.assume_available_upstreams | default([]) %}
+    #       upstream {{ upstream }} { server localhost:8080; }
+    #       {% endfor %}
+    #       include %s;
+    #     }" > /tmp/apache2.conf
+    #     sudo nginx -T -c /tmp/nginx.conf && rm -f /tmp/nginx.conf
+    #   '
+  loop: "{{ apache2_sites }}"
+  notify:
+    - reload apache2
+  tags: [nginx, config]
+
+- name: enable apache2 sites
+  when: item.enabled | default(False)
+  file:
+    src: "../sites-available/{{ item.name }}.conf"
+    path: "{{ apache2_sites_enabled_dir }}/{{ item.name }}.conf"
+    state: "{{ 'link' if (item.enabled | default(False)) else 'absent' }}"
+    mode: 0600
+    owner: root
+    group: root
+  loop: "{{ apache2_sites }}"
+  notify:
+    - reload apache2
+  tags: [apache2, config]
+
+- name: disable apache2 sites
+  when: not (item.enabled | default(False))
+  file:
+    path: "{{ apache2_sites_enabled_dir }}/{{ item.name }}.conf"
+    state: "absent"
+  loop: "{{ apache2_sites }}"
+  notify:
+    - reload apache2
+  tags: [apache2, config]

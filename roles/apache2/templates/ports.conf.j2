@@ -1,0 +1,5 @@
+## managed by ansible
+
+{% for port in apache2_ports_listen %}
+Listen {{ port }}
+{% endfor %}

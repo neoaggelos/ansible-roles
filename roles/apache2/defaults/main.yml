@@ -1,0 +1,52 @@
+---
+# apache2 configuration paths
+apache2_dir: /etc/apache2
+apache2_conf_file: "{{ apache2_dir }}/apache2.conf"
+apache2_ports_file: "{{ apache2_dir }}/ports.conf"
+
+apache2_sites_available_dir: "{{ apache2_dir }}/sites-available"
+apache2_sites_enabled_dir: "{{ apache2_dir }}/sites-enabled"
+apache2_conf_available_dir: "{{ apache2_dir }}/conf-available"
+apache2_conf_enabled_dir: "{{ apache2_dir }}/conf-enabled"
+apache2_mods_available_dir: "{{ apache2_dir }}/mods-available"
+apache2_mods_enabled_dir: "{{ apache2_dir }}/mods-enabled"
+
+# path to apache2.conf template file (if empty, no config is changed)
+# apache2_conf_template: "{{ playbook_dir }}/templates/apache2/apache2.conf"
+apache2_conf_template: ""
+
+# path to ports.conf template file
+# apache2_ports_template: "{{ playbook_dir }}/templates/apache2/ports.conf"
+apache2_ports_template: "ports.conf.j2"
+
+# list of "host:port" entries for apache2 to listen on. if not empty, ports.conf is written using the apache2_ports_template
+# apache2_ports_listen: ["0.0.0.0:80", "0.0.0.0:8080"]
+apache2_ports_listen: []
+
+# list of apache2 sites to configure in sites-available/
+# if enabled, a symlink is created on sites-enabled/, otherwise it is removed
+# apache2_sites:
+# - enabled: true
+#   name: 001-site1
+#   template: "{{ playbook_dir }}/templates/apache2/sites/site1.conf"
+apache2_sites: []
+
+# list of apache2 conf to configure in conf-available/. to enable, use apache2_conf below
+# apache2_conf_files:
+# - name: 001-conf1
+#   template: "{{ playbook_dir }}/templates/apache2/sites/conf1.conf"
+apache2_conf_files: []
+
+# list of existing apache2 conf to enable/disable (the conf must already exist in conf-available/)
+# if enabled, a symlink is created on conf-enabled/, otherwise it is removed
+# apache2_conf:
+# - enabled: true
+#   name: php8.3-fpm
+apache2_conf: []
+
+# list of existing apache2 mods to enable/disable (the mod must already exist in mods-available/)
+# if enabled, a symlink is created on mods-enabled/, otherwise it is removed
+# apache2_mods:
+# - enabled: true
+#   name: php8.3
+apache2_mods: []

@@ -1,0 +1,25 @@
+---
+- name: enable apache2 modules
+  when: item.enabled | default(False)
+  shell: a2enmod {{ item.name }}
+  loop: "{{ apache2_mods }}"
+  register: result
+  changed_when:
+    - '("Module %s already enabled" % item.name) not in result.stdout_lines'
+  notify:
+    - reload apache2
+  tags: [apache2, modules]
+
+- name: disable apache2 modules
+  when: not (item.enabled | default(False))
+  shell: a2dismod {{ item.name }}
+  loop: "{{ apache2_mods }}"
+  register: result
+  failed_when:
+    - "result.rc != 0 and ('ERROR: Module %s does not exist!' % item.name) not in result.stderr_lines"
+  changed_when:
+    - "('Module %s already disabled' % item.name) not in result.stdout_lines"
+    - "('ERROR: Module %s does not exist!' % item.name) not in result.stderr_lines"
+  notify:
+    - reload apache2
+  tags: [apache2, modules]

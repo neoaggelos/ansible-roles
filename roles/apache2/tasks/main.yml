@@ -1,0 +1,61 @@
+---
+- name: install apache2
+  package:
+    name: apache2
+    state: present
+  tags: [apache2, packages]
+
+- name: ensure apache2 directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - "{{ apache2_dir }}"
+    - "{{ apache2_sites_available_dir }}"
+    - "{{ apache2_sites_enabled_dir }}"
+    - "{{ apache2_conf_available_dir }}"
+    - "{{ apache2_conf_enabled_dir }}"
+    - "{{ apache2_mods_available_dir }}"
+    - "{{ apache2_mods_enabled_dir }}"
+  tags: [apache2, config]
+
+- include_tasks: sites.yml
+- include_tasks: conf.yml
+- include_tasks: mods.yml
+
+- name: configure ports.conf
+  when: apache2_ports_listen
+  template:
+    src: "{{ apache2_ports_template }}"
+    dest: "{{ apache2_ports_file }}"
+    mode: 0644
+    owner: root
+    group: root
+    # TODO(neoaggelos): validate
+    # validate: nginx -t -c %s
+  notify:
+    - reload apache2
+  tags: [apache2, config]
+
+- name: configure apache2.conf
+  when: apache2_conf_template
+  template:
+    src: "{{ apache2_conf_template }}"
+    dest: "{{ apache2_conf_file }}"
+    mode: 0644
+    owner: root
+    group: root
+    # TODO(neoaggelos): validate
+    # validate: nginx -t -c %s
+  notify:
+    - reload apache2
+  tags: [apache2, config]
+
+- name: enable apache2 service
+  service:
+    name: apache2
+    enabled: true
+  tags: [apache2, service]
