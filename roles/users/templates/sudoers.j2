@@ -1,7 +1,9 @@
 ##
 # {{ ansible_managed }}
 #
+{% if item.not_requiretty | default (False) %}
 Defaults:%sudo !requiretty
+{% endif %}
 {% if item.commands is string %}
 {% set commands = [item.commands] %}
 {% else %}
