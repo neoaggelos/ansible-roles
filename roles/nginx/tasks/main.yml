@@ -109,7 +109,7 @@
   tags: [nginx, config]
 
 - name: configure nginx.conf
-  when: nginx_conf_template
+  when: nginx_conf_template != ''
   template:
     src: "{{ nginx_conf_template }}"
     dest: "{{ nginx_conf_file }}"
