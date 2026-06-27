@@ -18,7 +18,7 @@
     # TODO(neoaggelos): validate
     # validate: some command to validate %s
   notify:
-    - start rsync service
+    - restart rsync service
   tags: [rsyncd, config]
 
 - name: configure rsyncd.conf
@@ -34,7 +34,7 @@
     # TODO(neoaggelos): validate
     # validate: some command to validate %s
   notify:
-    - start rsync service
+    - restart rsync service
   tags: [rsyncd, config]
 
 - name: enable rsync service
