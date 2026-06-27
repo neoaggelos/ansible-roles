@@ -1,0 +1,5 @@
+- name: start rsync service
+  service:
+    name: rsync
+    state: started
+  tags: [rsyncd, service]

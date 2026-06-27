@@ -1,0 +1,45 @@
+# enable rsyncd service
+rsyncd_service_enable: true
+
+# path for rsyncd configuration file (if empty, no config is changed)
+rsyncd_conf_file: /etc/rsyncd.conf
+
+# path to rsyncd.conf template file (if empty, no config is changed)
+# rsyncd_conf_template: "{{ playbook_dir }}/templates/rsyncd/rsyncd.conf"
+rsyncd_conf_template: templates/rsyncd.conf
+
+# path to rsyncd secrets file (if empty, no config is changed)
+rsyncd_secrets_file: /etc/rsyncd.secrets
+
+# path to rsyncd secrets template file (if empty, no config is changed)
+rsyncd_secrets_template: templates/rsyncd.secrets
+
+# users to configure in default rsyncd secrets file
+# rsyncd_secrets_users:
+#   user1: super_safe_pass1
+rsyncd_secrets_users: []
+
+# rsyncd global configuration
+# rsyncd_conf_global:
+#   pid file: "/var/run/rsync.pid"
+#   max connections: "128"
+rsyncd_conf_global: {}
+
+# rsyncd module configuration
+# rsyncd_conf_modules:
+#   ubuntu:
+#     path: /pub/linux/ubuntu
+#     comment: ubuntu archives mirror
+#     timeout: "600"
+#     list: "no"
+#     read only: "no"
+#
+#   example-all:
+#     path: /pub/some/path
+#     comment: example to exercise all values
+#     list: "no"
+#     read only: "no"
+#     outgoing chmod: "Du=rwx,Dgo=rx,Fu=rw,Fgo=r"
+#     incoming chmod: "Du=rwx,Dgo=rx,Fu=rw,Fgo=r"
+#     auth users: "user"
+rsyncd_conf_modules: {}

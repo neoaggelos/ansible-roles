@@ -1,0 +1,44 @@
+---
+- name: install rsync
+  package:
+    name: rsync
+    state: present
+  tags: [rsyncd, packages]
+
+- name: configure rsyncd.secrets
+  when:
+  - rsyncd_secrets_file != ''
+  - rsyncd_secrets_template != ''
+  template:
+    src: "{{ rsyncd_secrets_template }}"
+    dest: "{{ rsyncd_secrets_file }}"
+    mode: 0600
+    owner: root
+    group: root
+    # TODO(neoaggelos): validate
+    # validate: some command to validate %s
+  notify:
+    - start rsync service
+  tags: [rsyncd, config]
+
+- name: configure rsyncd.conf
+  when:
+  - rsyncd_conf_file != ''
+  - rsyncd_conf_template != ''
+  template:
+    src: "{{ rsyncd_conf_template }}"
+    dest: "{{ rsyncd_conf_file }}"
+    mode: 0600
+    owner: root
+    group: root
+    # TODO(neoaggelos): validate
+    # validate: some command to validate %s
+  notify:
+    - start rsync service
+  tags: [rsyncd, config]
+
+- name: enable rsync service
+  service:
+    name: rsync
+    enabled: true
+  tags: [rsyncd, service]
