@@ -6,7 +6,7 @@
     owner: "{{ item.user | default(omit) }}"
     group: "{{ item.user | default(omit) }}"
     mode: "0700"
-  when: item.file | default(false)
+  when: (item.file | default('')) != ''
   loop: "{{ cronjobs }}"
   tags: [cron]
 
