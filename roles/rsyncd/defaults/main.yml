@@ -17,7 +17,7 @@ rsyncd_secrets_template: templates/rsyncd.secrets
 # users to configure in default rsyncd secrets file
 # rsyncd_secrets_users:
 #   user1: super_safe_pass1
-rsyncd_secrets_users: []
+rsyncd_secrets_users: {}
 
 # rsyncd global configuration
 # rsyncd_conf_global:
