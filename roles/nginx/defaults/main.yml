@@ -9,6 +9,12 @@ nginx_htpasswd_dir: "{{ nginx_dir }}/htpasswd.d"
 # nginx static root
 nginx_static_root: /var/www/html
 
+# subdirectories to create under nginx_static_root
+# nginx_static_subdirectories:
+# - site.example.com
+# - site2.example.com
+nginx_static_root_subdirectories: []
+
 # path to nginx.conf template file (if empty, no config is changed)
 # nginx_conf_template: "{{ playbook_dir }}/templates/nginx/nginx.conf"
 nginx_conf_template: ""

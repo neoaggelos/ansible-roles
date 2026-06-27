@@ -20,6 +20,16 @@
     - "{{ nginx_static_root }}"
   tags: [nginx, config]
 
+- name: ensure nginx static directories
+  file:
+    state: directory
+    path: "{{ nginx_static_root }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  loop: "{{ nginx_static_root_subdirectories }}"
+  tags: [nginx, config]
+
 - name: create static files
   when: item.state | default('present') == 'present'
   template:
