@@ -59,6 +59,7 @@
   tags: [nginx, config]
 
 - name: configure nginx sites
+  when: item.enabled | default(True)
   template:
     src: "{{ item.template }}"
     dest: "{{ nginx_sites_available_dir }}/{{ item.name }}.conf"
