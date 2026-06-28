@@ -1,0 +1,77 @@
+# path for vsftpd configuration file (if empty, no config is changed)
+vsftpd_conf_file: /etc/vsftpd.conf
+
+# path to vsftpd.conf template file (if empty, no config is changed)
+# vsftpd_conf_template: "{{ playbook_dir }}/templates/vsftpd/vsftpd.conf"
+vsftpd_conf_template: templates/vsftpd.conf
+
+# configuration for vsftpd.conf (configs below are from Ubuntu 24.04 system).
+# vsftpd_conf:
+#   listen: "NO"
+#   listen_ipv6: "NO"
+#   anonymous_enable: "NO"
+#   local_enable: "YES"
+#   # write_enable: "YES"
+#   # local_umask: "022"
+#   # anon_upload_enable: "YES"
+#   # anon_mkdir_write_enable: "YES"
+#   dirmessage_enable: "YES"
+#   use_locatime: "YES"
+#   xferlog_enable: "YES"
+#   connect_from_port_20: "YES"
+#   # chown_uploads: "YES"
+#   # chown_username: "whoever"
+#   # xferlog_file: "/var/log/vsftpd.log"
+#   # xferlog_std_format: "YES"
+#   # idle_session_timeout: "600"
+#   # data_connection_timeout: "120"
+#   # nopriv_user: "ftpsecure"
+#   # async_abor_enable: "YES"
+#   # ascii_upload_enable: "YES"
+#   # ascii_download_enable: "YES"
+#   # fptd_banner: "Welcome to FTP service"
+#   # deny_email_enable: "YES"
+#   # banned_email_file: "/etc/vsftpd.banned_emails"
+#   # chroot_local_user: "YES"
+#   # chroot_list_enable: "YES"
+#   # chroot_list_file: "/etc/vsftpd.chroot_list"
+#   # ls_recurse_enable: "YES"
+#   secure_chroot_dir: "/var/run/vsftpd/empty"
+#   pam_service_name: "vsftpd"
+#   rsa_cert_file: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+#   rsa_private_key_file: "/etc/ssl/private/ssl-cert-snakeoil.key"
+#   ssl_enable: "NO"
+#   # utf8_filesystem: "YES"
+#
+#   # tcp_wrappers: "YES"
+#   # max_clients: "750"
+#   # max_per_ip: "50"
+#   # no_anon_password: "YES"
+#   # hide_ids: "YES"
+#   # anon_root: "/ftp"
+#   # listen_address: "{{ ansible_default_ipv4 }}"
+#   # listen_address6: "{{ ansible_default_ipv6 }}"
+#   # setproctitle_enable: "YES"
+#   # one_process_model: "YES"
+#   # use_sendfile: "NO"
+vsftpd_conf: {}
+
+# list of directories to create for vsftpd to serve files
+# vsftpd_directories:
+# - path: /pub
+# - path: /pub
+#   owner: root
+#   group: root
+#   mode: '0755'
+vsftpd_directories: []
+
+# list of files to create around the filesystem
+# vsftpd_message_files:
+# - path: /pub/.message
+#   template: "{{ playbook_dir }}/templates/vsftpd/welcome"
+# - path: /pub/some-other
+#   template: "{{ playbook_dir }}/templates/vsftpd/something"
+#   owner: root
+#   group: root
+#   mode: '0755'
+vsftpd_files: []

@@ -1,0 +1,44 @@
+---
+- name: install vsftpd
+  package:
+    name: vsftpd
+    state: present
+  tags: [vsftpd, packages]
+
+- name: configure vsftpd.conf
+  when:
+  - vsftpd_conf_file | default('') != ''
+  - vsftpd_conf_template | default('') != ''
+  - vsftpd_conf | length > 0
+  template:
+    src: "{{ vsftpd_conf_template }}"
+    dest: "{{ vsftpd_conf_file }}"
+    mode: 0600
+    owner: root
+    group: root
+    # TODO(neoaggelos): validate
+    # validate: some command to validate %s
+  notify:
+    - restart vsftpd service
+  tags: [vsftpd, config]
+
+- name: ensure data directories
+  file:
+    state: directory
+    path: "{{ item.path }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  loop: "{{ vsftpd_directories }}"
+  tags: [vsftpd, config]
+
+- name: create static files
+  when: item.state | default('present') == 'present'
+  template:
+    src: "{{ item.template }}"
+    dest: "{{ item.path }}"
+    mode: "{{ item.mode | default('0644') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+  loop: "{{ vsftpd_files }}"
+  tags: [vsftpd, config]
