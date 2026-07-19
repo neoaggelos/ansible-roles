@@ -17,3 +17,6 @@ docker_compose_url: https://github.com/docker/compose/releases/download/v{{ dock
 # docker_daemon_config_json: |
 #   {"bridge": "none", "ip-forward": false, "iptables": false}
 docker_daemon_config_json: ""
+
+# docker_add_user_to_group controls whether to add the current ansible_user to the docker group
+docker_add_user_to_group: false

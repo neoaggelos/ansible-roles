@@ -46,6 +46,7 @@
   tags: [docker, compose]
 
 - name: add user to docker group
+  when: docker_add_user_to_group
   user:
     append: yes
     groups: [docker]
