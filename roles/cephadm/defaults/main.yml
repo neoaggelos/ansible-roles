@@ -1,0 +1,12 @@
+---
+# cephadm release to install
+cephadm_release: "tentacle"
+
+# fail if cephadm check-host is not successful
+cephadm_check_host: true
+
+# install ceph-common package
+cephadm_install_ceph_common: true
+
+# install ceph-volume package
+cephadm_install_ceph_volume: false

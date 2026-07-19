@@ -1,0 +1,40 @@
+---
+- name: install cephadm
+  package:
+    name: cephadm
+    state: present
+  tags: [cephadm, packages]
+
+- name: cephadm check host
+  when: cephadm_check_host
+  shell:
+    cmd: cephadm check-host
+  changed_when: false
+  tags: [cephadm]
+
+- name: check cephadm version
+  shell:
+    cmd: cephadm version
+  register: check_cephadm_version
+  failed_when: false
+  changed_when: false
+  tags: [cephadm]
+
+- name: install cephadm release
+  include_tasks: install-release.yml
+  when: cephadm_release not in check_cephadm_version.stdout
+  tags: [cephadm]
+
+- name: install ceph-common
+  when: cephadm_install_ceph_common
+  package:
+    name: ceph-common
+    state: latest
+  tags: [cephadm, packages]
+
+- name: install ceph-volume
+  when: cephadm_install_ceph_volume
+  package:
+    name: ceph-volume
+    state: latest
+  tags: [cephadm, packages]

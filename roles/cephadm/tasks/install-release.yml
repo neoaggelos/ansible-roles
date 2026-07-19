@@ -1,0 +1,10 @@
+---
+- name: cephadm add-repo
+  shell:
+    cmd: cephadm add-repo --release {{ cephadm_release | quote }}
+  tags: [cephadm]
+
+- name: cephadm install
+  shell:
+    cmd: cephadm install
+  tags: [cephadm]
