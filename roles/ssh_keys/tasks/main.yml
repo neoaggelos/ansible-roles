@@ -1,0 +1,11 @@
+---
+- name: configure SSH private keys
+  template:
+    src: id_rsa
+    dest: "{{ item.path }}"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: "0400"
+  with_items: "{{ ssh_keys }}"
+  no_log: true
+  tags: [ssh_keys]

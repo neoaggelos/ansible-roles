@@ -1,0 +1,10 @@
+---
+# ssh_keys is a list of ssh private keys to create on hosts.
+# ssh_keys:
+# - user: root
+#   path: /root/.ssh/id_ed25519
+#   private_key: |
+#     #   -----BEGIN RSA PRIVATE KEY-----
+#     #   .....
+#     #   -----END RSA PRIVATE KEY-----
+ssh_keys: []

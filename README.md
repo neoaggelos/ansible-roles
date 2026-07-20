@@ -38,7 +38,8 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `rke`                     | Configure a RKE cluster                                    | Ubuntu, CentOS, Rocky, Debian |
 | `rke2`                    | Configure a RKE2 cluster                                   | Ubuntu, CentOS, Rocky, Debian |
 | `rsyncd`                  | Configure rsync daemon                                     | Ubuntu                        |
-| `ssh_access`              | Configure SSH access across machines of the same inventory | Ubuntu, CentOS, Rocky, Debian |
+| `ssh_access` (deprecated) | Configure SSH access across machines of the same inventory | Ubuntu, CentOS, Rocky, Debian |
+| `ssh_keys`                | Configure SSH private keys on nodes                        | Ubuntu, CentOS, Rocky, Debian |
 | `systemd_timesyncd_ntp`   | Configure NTP server for systemd-timesyncd                 | Ubuntu, CentOS, Rocky, Debian |
 | `upgrades`                | Configure cron unattended upgrade schedule                 | Ubuntu, CentOS, Rocky, Debian |
 | `users`                   | Configure users and SSH access                             | Ubuntu, CentOS, Rocky, Debian |
