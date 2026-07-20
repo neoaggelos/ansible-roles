@@ -12,7 +12,7 @@
 
 - name: configure SSH public keys
   template:
-    src: id_rsa
+    src: id_rsa.pub
     dest: "{{ item.path }}.pub"
     owner: "{{ item.user }}"
     group: "{{ item.user }}"
