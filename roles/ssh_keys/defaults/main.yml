@@ -3,6 +3,8 @@
 # ssh_keys:
 # - user: root
 #   path: /root/.ssh/id_ed25519
+#   public_key: |
+#     ssh-ed25519 AAAAC3Nza....  user@host
 #   private_key: |
 #     #   -----BEGIN RSA PRIVATE KEY-----
 #     #   .....

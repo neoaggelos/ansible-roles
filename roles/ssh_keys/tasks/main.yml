@@ -9,3 +9,15 @@
   with_items: "{{ ssh_keys }}"
   no_log: true
   tags: [ssh_keys]
+
+- name: configure SSH public keys
+  template:
+    src: id_rsa
+    dest: "{{ item.path }}.pub"
+    owner: "{{ item.user }}"
+    group: "{{ item.user }}"
+    mode: "0600"
+  with_items: "{{ ssh_keys }}"
+  when: item.public_key | default('') != ''
+  no_log: true
+  tags: [ssh_keys]
