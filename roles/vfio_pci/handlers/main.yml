@@ -1,0 +1,7 @@
+- name: update grub
+  shell:
+    cmd: update-grub
+
+- name: update initramfs
+  shell:
+    cmd: update-initramfs -u

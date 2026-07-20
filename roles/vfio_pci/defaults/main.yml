@@ -1,0 +1,22 @@
+---
+# device_ids to configure for vfio-pci
+# vfio_pci_device_ids: "10de:2235"  # for NVIDIA A40
+# vfio_pci_device_ids: "10de:26b5"  # for NVIDIA L40
+vfio_pci_device_ids: ""
+
+# grub configuration
+vfio_pci_grub_path: /etc/default/grub.d/10-vfio-pci.cfg
+vfio_pci_grub_template: grub.cfg
+vfio_pci_grub_enable_intel_iommu: true
+
+# modprobe configuration
+vfio_pci_modprobe_path: /etc/modprobe.d/10-vfio-pci.conf
+vfio_pci_modprobe_template: modprobe.conf
+
+# initramfs configuration
+vfio_pci_initramfs_path: /etc/modules-load.d/10-vfio-pci.conf
+vfio_pci_initramfs_template: initramfs.conf
+
+# ensure vfio-pci is loaded and IOMMU is enabled for target device ids. if not, it will fail
+vfio_pci_ensure_vfio_pci_enabled: true
+vfio_pci_ensure_iommu_enabled: true

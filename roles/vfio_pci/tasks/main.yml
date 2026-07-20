@@ -1,0 +1,62 @@
+---
+- name: configure grub
+  template:
+    src: "{{ vfio_pci_grub_template }}"
+    dest: "{{ vfio_pci_grub_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: vfio_pci_grub_path | default('') != ''
+  notify: update grub
+  tags: [vfio-pci, grub]
+
+- name: configure modprobe
+  template:
+    src: "{{ vfio_pci_modprobe_template }}"
+    dest: "{{ vfio_pci_modprobe_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: vfio_pci_modprobe_path | default('') != ''
+  tags: [vfio-pci, modprobe]
+
+- name: enable vfio-pci load
+  template:
+    src: "{{ vfio_pci_initramfs_template }}"
+    dest: "{{ vfio_pci_initramfs_path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  when: vfio_pci_initramfs_path | default('') != ''
+  notify: update initramfs
+  tags: [vfio-pci, initramfs]
+- meta: flush_handlers
+
+- name: check dmesg logs
+  command:
+    cmd: dmesg
+  register: check_dmesg
+  changed_when: false
+  tags: [vfio-pci, validate]
+
+- name: fail if iommu not enabled
+  when:
+  - vfio_pci_ensure_iommu_enabled
+  - "'IOMMU enabled' not in check_dmesg.stdout"
+  fail:
+    msg: |
+      node dmesg logs do not contain 'IOMMU enabled'. To address this, you need to:
+      1. reboot the node after role has been applied
+      2. if issue persists after reboot, ensure vfio_pci_device_ids are correct
+  tags: [vfio-pci, validate]
+
+- name: fail if vfio-pci not enabled and configured
+  when:
+  - vfio_pci_ensure_iommu_enabled
+  - check_dmesg.stdout_lines | select('regex', 'vfio-pci') | select('regex', vfio_pci_device_ids) | list | length == 0
+  fail:
+    msg: |
+      node dmesg logs do not contain 'vfio-pci ... {{ vfio_pci_device_ids }}'. To address this, you need to:
+      1. reboot the node after role has been applied
+      2. if issue persists after reboot, ensure vfio_pci_device_ids are correct
+  tags: [vfio-pci, validate]
