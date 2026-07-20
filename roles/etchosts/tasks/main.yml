@@ -1,4 +1,9 @@
 ---
+- name: set ansible_hostname fact
+  setup:
+    filter: ansible_hostname
+  tags: [etchosts]
+
 - name: configure /etc/hosts for all hosts
   when:
     - etchosts_configure
@@ -8,3 +13,19 @@
     marker: "## {mark} ANSIBLE MANAGED HOSTS"
   notify: clean known hosts
   tags: [etchosts]
+
+- name: ensure hostname does not point to loopback in /etc/hosts
+  when: etchosts_ensure_no_self_loopback
+  lineinfile:
+    dest: /etc/hosts
+    regexp: "^127.\\d+.\\d+.\\d+(\\s.*)?\\s+{{ ansible_hostname }}$"
+    state: absent
+  tags: [etchosts, loopback]
+
+- name: ensure cloud-init does not manage /etc/hosts
+  when: etchosts_ensure_not_managed
+  copy:
+    content: "manage_etc_hosts: false"
+    dest: /etc/cloud/cloud.cfg.d/99-no-manage-etc-hosts.cfg
+    mode: "0660"
+  tags: [etchosts, cloud-init]

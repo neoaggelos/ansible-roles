@@ -8,6 +8,12 @@ etchosts_add_self: true
 # remove .ssh/known_hosts files after updating /etc/hosts on the machine
 etchosts_clean_known_hosts: false
 
+# remove 127.0.1.1 entry for self
+etchosts_ensure_no_self_loopback: true
+
+# do not let cloud-init manage /etc/hosts on the machine
+etchosts_ensure_not_managed: true
+
 etchosts: |
   {% for host in groups['all'] | sort %}
   {{ hostvars[host].ansible_host }} {{ host }} {{ host.split('.')[0] }}
