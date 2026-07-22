@@ -1,0 +1,2 @@
+## {{ ansible_managed }}
+InitiatorName={{ iscsid_initiator_name }}

@@ -20,6 +20,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `docker_compose`          | Install Docker Compose                                     | Ubuntu, CentOS, Rocky, Debian |
 | `etc_hosts`               | Configure entries in /etc/hosts                            | Ubuntu, CentOS, Rocky, Debian |
 | `hostname`                | Configure host name                                        | Ubuntu, CentOS, Rocky, Debian |
+| `iscsid`                  | Configure iSCSI daemon on nodes                            | Ubuntu 24.04                  |
 | `k3s`                     | Configure a K3s cluster                                    | Ubuntu, CentOS, Rocky, Debian |
 | `keepalived`              | Setup a VIP using Keepalived                               | Ubuntu, CentOS, Rocky, Debian |
 | `kernel_modules_disable`  | Disable and blacklist Kernel modules                       | Ubuntu, CentOS, Rocky, Debian |

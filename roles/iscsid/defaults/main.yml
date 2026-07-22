@@ -1,0 +1,4 @@
+---
+# iSCSI initiator name to configure on the host (no-op if empty).
+# iscsid_initiator_name: "iqn.2000-10.com.example.name:00:010203040506"
+iscsid_initiator_name: ""

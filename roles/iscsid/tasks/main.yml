@@ -1,0 +1,23 @@
+---
+- name: ensure iscsi package is installed
+  package:
+    name: open-iscsi
+    state: present
+  tags: [iscsid, packages]
+
+- name: configure initiator name
+  when: iscsid_initiator_name != ''
+  template:
+    src: initiatorname.iscsi
+    dest: /etc/iscsi/initiatorname.iscsi
+    mode: "0600"
+    owner: root
+    group: root
+  notify: restart iscsid
+  tags: [iscsid, config]
+
+- name: enable iscsid service
+  service:
+    name: iscsid
+    enabled: true
+  tags: [iscsid, service]
