@@ -1,0 +1,10 @@
+---
+- name: restart lvmlockd
+  service:
+    name: lvmlockd
+    state: restarted
+
+- name: restart sanlock
+  service:
+    name: sanlock
+    state: restarted

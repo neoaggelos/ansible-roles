@@ -1,0 +1,56 @@
+---
+- name: install lvmlockd package
+  package:
+    name: lvm2-lockd
+    state: present
+  tags: [lvmlockd, packages]
+
+- name: install sanlock package
+  package:
+    name: sanlock
+    state: present
+  when: lvmlockd_enable_sanlock
+  tags: [lvmlockd, packages]
+
+- name: enable lvmlockd in lvm.conf
+  lineinfile:
+    name: /etc/lvm/lvm.conf
+    regexp: "^[\\s#]*use_lvmlockd\\s*=.*$"
+    line: "\tuse_lvmlockd = 1"
+    state: present
+  when: lvmlockd_enable
+  notify:
+  - restart lvmlockd
+  tags: [lvmlockd, config]
+
+- name: configure host_id in lvmlocal.conf
+  lineinfile:
+    name: /etc/lvm/lvmlocal.conf
+    regexp: "^[\\s#]*host_id\\s*=.*$"
+    line: "\thost_id = {{ lvmlockd_host_id }}"
+    state: present
+  notify:
+  - restart sanlock
+  when:
+  - lvmlockd_enable
+  - lvmlockd_enable_sanlock
+  - lvmlockd_host_id | default('') | string | length > 0
+  tags: [lvmlockd, config]
+
+- name: enable lvmlockd service
+  service:
+    name: lvmlockd
+    enabled: true
+  when: lvmlockd_enable
+  notify:
+  - restart lvmlockd
+  tags: [lvmlockd, service]
+
+- name: enable sanlock service
+  service:
+    name: sanlock
+    enabled: true
+  when: lvmlockd_enable_sanlock
+  notify:
+  - restart sanlock
+  tags: [lvmlockd, service]

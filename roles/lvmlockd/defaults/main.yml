@@ -1,0 +1,9 @@
+---
+# lvmlockd_host_id is set in /etc/lvm/lvmlocal.conf, and must be unique across nodes
+lvmlockd_host_id: ""
+
+# enable lvmlockd.service
+lvmlockd_enable: true
+
+# enable sanlock.service
+lvmlockd_enable_sanlock: true

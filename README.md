@@ -25,6 +25,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `keepalived`              | Setup a VIP using Keepalived                               | Ubuntu, CentOS, Rocky, Debian |
 | `kernel_modules_disable`  | Disable and blacklist Kernel modules                       | Ubuntu, CentOS, Rocky, Debian |
 | `lvm_volume`              | Configure LVM volume group and logical volumes             | Ubuntu, CentOS, Rocky, Debian |
+| `lvmlockd`                | Configure LVM lvmlockd and sanlock                         | Ubuntu 24.04                  |
 | `microk8s`                | Configure a MicroK8s cluster                               | Ubuntu, CentOS, Rocky, Debian |
 | `mysqld_exporter`         | Configure mysqld exporter (requires docker_compose)        | Ubuntu, CentOS, Rocky, Debian |
 | `netdata`                 | Configure netdata (and optional Slack alerts)              | Ubuntu                        |
