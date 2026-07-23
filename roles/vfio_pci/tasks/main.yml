@@ -36,6 +36,7 @@
   command:
     cmd: dmesg
   register: check_dmesg
+  check_mode: false
   changed_when: false
   tags: [vfio-pci, validate]
 
