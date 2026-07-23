@@ -2,6 +2,7 @@
 - name: gather ansible network facts
   setup:
     gather_subset: network
+  when: ansible_default_ipv4 is not defined
   tags: [vip, keepalived, facts]
 
 - name: install keepalived

@@ -2,6 +2,7 @@
 - name: set ansible_distribution fact
   setup:
     filter: ansible_distribution
+  when: ansible_distribution is not defined
   tags: [users]
 
 - name: ensure sudo is installed

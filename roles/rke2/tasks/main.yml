@@ -6,6 +6,7 @@
 - name: set hardware facts
   setup:
     gather_subset: hardware
+  when: ansible_nodename is not defined or ansible_distribution is not defined
   tags: [rke2, facts]
 
 - name: initialize rke2

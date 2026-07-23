@@ -2,6 +2,7 @@
 - name: gather ansible system facts
   setup:
     gather_subset: hardware
+  when: ansible_distribution is not defined or ansible_system is not defined or ansible_machine is not defined
   tags: [docker]
 
 - name: ensure docker daemon configuration directory

@@ -2,6 +2,7 @@
 - name: set ansible_distribution fact
   setup:
     filter: ansible_distribution
+  when: ansible_distribution is not defined
   tags: [utils, packages]
 
 - name: install epel release repo
@@ -15,6 +16,7 @@
   when: (ansible_distribution | lower) in ['ubuntu', 'debian']
   apt:
     update_cache: true
+  changed_when: false
   tags: [utils, packages, apt]
 
 - name: install util packages

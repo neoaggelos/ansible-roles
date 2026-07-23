@@ -2,6 +2,7 @@
 - name: set ansible_hostname fact
   setup:
     filter: ansible_hostname
+  when: ansible_hostname is not defined
   tags: [etchosts]
 
 - name: configure /etc/hosts for all hosts

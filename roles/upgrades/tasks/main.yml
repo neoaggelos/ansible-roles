@@ -3,6 +3,7 @@
   setup:
     gather_subset: hardware
     filter: ansible_distribution
+  when: ansible_distribution is not defined
   tags: [upgrades, facts]
 
 - name: update system packages

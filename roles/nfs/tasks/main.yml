@@ -1,6 +1,8 @@
 ---
 - name: set ansible_default_ipv4
-  when: inventory_hostname in (nfs_exports | default({}) | combine(nfs_clients | default({})))
+  when:
+  - inventory_hostname in (nfs_exports | default({}) | combine(nfs_clients | default({})))
+  - ansible_default_ipv4 is not defined
   setup:
     gather_subset: network
     filter: ansible_default_ipv4
@@ -9,7 +11,9 @@
 - name: set ansible_distribution fact
   setup:
     filter: ansible_distribution
-  when: inventory_hostname in (nfs_exports | default({}) | combine(nfs_clients | default({})))
+  when:
+  - inventory_hostname in (nfs_exports | default({}) | combine(nfs_clients | default({})))
+  - ansible_distribution is not defined
   tags: [nfs, facts]
 
 - name: configure nfs server shares

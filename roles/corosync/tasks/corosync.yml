@@ -3,6 +3,7 @@
   setup:
     gather_subset: network
     filter: ansible_default_ipv4
+  when: ansible_default_ipv4 is not defined
   tags: [vip, corosync, facts]
 
 - name: install corosync
