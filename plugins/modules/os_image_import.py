@@ -43,6 +43,10 @@ OPTIONS = {
         "required": False,
         "default": False,
     },
+    "openstack_connect_args": {
+        "type": "dict",
+        "required": False,
+    },
 }
 
 DOCUMENTATION = """
@@ -114,12 +118,13 @@ def run_module():
     update_and_replace = module.params["update_and_replace"]
     visibility = module.params["visibility"]
     metadata = module.params.get("metadata", {})
+    openstack_connect_args = module.params.get("openstack_connect_args", {})
     changed = False
 
     if rename_and_replace and update_and_replace:
         module.fail_json("only one of renane_and_replace and update_and_replace may be set")
 
-    c = openstack.connect()
+    c = openstack.connect(**openstack_connect_args)
     image = c.get_image(module.params["name"])
 
     # NOTE(neoaggelos/2024-09-03): Some servers return HTTP 403 for the default Python user-agent, use curl/7.81.0 instead.
