@@ -1,6 +1,6 @@
 ---
-# cephadm release to install
-cephadm_release: "tentacle"
+# cephadm release to install, e.g. "tentacle", "squid". if not specified, uses the distro default
+cephadm_release: ""
 
 # fail if cephadm check-host is not successful
 cephadm_check_host: true

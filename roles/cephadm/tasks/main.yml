@@ -22,7 +22,9 @@
 
 - name: install cephadm release
   include_tasks: install-release.yml
-  when: cephadm_release not in check_cephadm_version.stdout
+  when:
+  - cephadm_release != ''
+  - cephadm_release not in check_cephadm_version.stdout
   tags: [cephadm]
 
 - name: install ceph-common
