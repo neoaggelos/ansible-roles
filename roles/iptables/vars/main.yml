@@ -1,10 +1,10 @@
 ---
 # packages to install for persistent iptables rules
 distro_packages:
-  ubuntu: [netfilter-persistent]
-  debian: [netfilter-persistent]
-  centos: [iptables-services]
-  rocky: [iptables-services]
+  ubuntu: iptables-persistent
+  debian: iptables-persistent
+  centos: iptables-services
+  rocky: iptables-services
 
 # services to enable for persistent iptables rules
 distro_services:
