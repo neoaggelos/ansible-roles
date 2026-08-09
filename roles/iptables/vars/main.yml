@@ -26,3 +26,10 @@ distro_rules_v6_path:
   debian: /etc/iptables/rules.v6
   centos: /etc/sysconfig/ip6tables
   rocky: /etc/sysconfig/ip6tables
+
+# path to file for persistent ipv6 rules
+distro_config_dir:
+  ubuntu: /etc/iptables
+  debian: /etc/iptables
+  centos: /etc/sysconfig
+  rocky: /etc/sysconfig

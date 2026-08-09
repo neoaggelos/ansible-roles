@@ -18,6 +18,15 @@
   loop: "{{ iptables_persistent_services }}"
   tags: [iptables, service]
 
+- name: ensure directory
+  file:
+    state: directory
+    path: "{{ iptables_persistent_config_dir }}"
+    mode: "0755"
+    owner: root
+    group: root
+  tags: [iptables, configure]
+
 - name: render rules v4
   template:
     src: "{{ iptables_rules_v4_template }}"

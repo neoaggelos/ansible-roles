@@ -2,6 +2,7 @@
 # package and service name for persistent iptables
 iptables_persistent_package: "{{ distro_packages[ansible_facts.distribution | lower] }}"
 iptables_persistent_services: "{{ distro_services[ansible_facts.distribution | lower] }}"
+iptables_persistent_config_dir: "{{ distro_config_dir[ansible_facts.distribution | lower] }}"
 
 # template and destination path for ipv4 rules
 iptables_rules_v4_service: iptables
