@@ -1,0 +1,11 @@
+## {{ ansible_managed }}
+{% for table_name, table_config in rules.items() %}
+*{{ table_name }}
+{% for chain in (table_config.chains or []) %}
+{{ chain }}
+{% endfor %}
+{% for rule in (table_config.rules or []) %}
+{{ rule }}
+{% endfor %}
+COMMIT
+{% endfor %}

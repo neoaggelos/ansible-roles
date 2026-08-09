@@ -1,0 +1,48 @@
+---
+# package and service name for persistent iptables
+iptables_persistent_package: "{{ distro_packages[ansible_facts.distribution | lower] }}"
+iptables_persistent_services: "{{ distro_services[ansible_facts.distribution | lower] }}"
+
+# template and destination path for ipv4 rules
+iptables_rules_v4_service: iptables
+iptables_rules_v4_template: rules.j2
+iptables_rules_v4_path: "{{ distro_rules_v4_path[ansible_facts.distribution | lower] }}"
+
+# template and destination path for ipv6 rules
+iptables_rules_v6_service: ip6tables
+iptables_rules_v6_template: rules.j2
+iptables_rules_v6_path: "{{ distro_rules_v6_path[ansible_facts.distribution | lower] }}"
+
+# iptables v4 rules to configure, when the default template is used.
+#
+# FORMAT IS:
+#   iptables_rules_v4:
+#     <TABLENAME>:
+#       chains:
+#       - :<CHAIN> <POLICY> [0:0]
+#       - ...
+#       rules:
+#       - -I <CHAIN> ...
+#
+# EXAMPLE VALUES FOR A HOST WITH DEFAULT POLICY DROP, BUT ENABLE SSH AND NAT POSTROUTING:
+#
+# iptables_rules_v4:
+#   filter:
+#     chains:
+#     - :INPUT DROP [0:0]
+#     - :FORWARD ACCEPT [0:0]
+#     - :OUTPUT ACCEPT [0:0]
+#     rules:
+#     - -I INPUT -p tcp ! --dport 5000 -j ACCEPT
+#   nat:
+#     chains:
+#     - :PREROUTING ACCEPT [0:0]
+#     - :INPUT ACCEPT [0:0]
+#     - :OUTPUT ACCEPT [0:0]
+#     - :POSTROUTING ACCEPT [0:0]
+#     rules:
+#     - -A POSTROUTING -s 10.0.0.0/16 -j MASQUERADE
+iptables_rules_v4: {}
+
+# iptables v6 rules to configure, when the default template is used. same format as iptables_rules_v4
+iptables_rules_v6: {}

@@ -1,0 +1,28 @@
+---
+# packages to install for persistent iptables rules
+distro_packages:
+  ubuntu: [netfilter-persistent]
+  debian: [netfilter-persistent]
+  centos: [iptables-services]
+  rocky: [iptables-services]
+
+# services to enable for persistent iptables rules
+distro_services:
+  ubuntu: [netfilter-persistent]
+  debian: [netfilter-persistent]
+  centos: [iptables, ip6tables]
+  rocky: [iptables, ip6tables]
+
+# path to file for persistent ipv4 rules
+distro_rules_v4_path:
+  ubuntu: /etc/iptables/rules.v4
+  debian: /etc/iptables/rules.v4
+  centos: /etc/sysconfig/iptables
+  rocky: /etc/sysconfig/iptables
+
+# path to file for persistent ipv6 rules
+distro_rules_v6_path:
+  ubuntu: /etc/iptables/rules.v6
+  debian: /etc/iptables/rules.v6
+  centos: /etc/sysconfig/ip6tables
+  rocky: /etc/sysconfig/ip6tables

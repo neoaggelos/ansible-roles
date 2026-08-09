@@ -1,0 +1,47 @@
+---
+- name: set ansible_distribution fact
+  setup:
+    filter: ansible_distribution
+  when: ansible_facts.distribution is not defined
+  tags: [utils, packages]
+
+- name: install iptables-persistent
+  package:
+    name: "{{ iptables_persistent_package }}"
+    state: present
+  tags: [iptables, packages]
+
+- name: enable services
+  service:
+    name: "{{ item }}"
+    enabled: true
+  loop: "{{ iptables_persistent_services }}"
+  tags: [iptables, service]
+
+- name: render rules v4
+  template:
+    src: "{{ iptables_rules_v4_template }}"
+    dest: "{{ iptables_rules_v4_path }}"
+    mode: "0400"
+    owner: root
+    group: root
+    validate: iptables-restore --test %s
+  vars:
+    rules: "{{ iptables_rules_v4 }}"
+  when: iptables_rules_v4 | length > 0
+  notify: apply v4 rules
+  tags: [iptables, configure]
+
+- name: render rules v6
+  template:
+    src: "{{ iptables_rules_v6_template }}"
+    dest: "{{ iptables_rules_v6_path }}"
+    mode: "0400"
+    owner: root
+    group: root
+    validate: ip6tables-restore --test %s
+  vars:
+    rules: "{{ iptables_rules_v6 }}"
+  when: iptables_rules_v6 | length > 0
+  notify: apply v6 rules
+  tags: [iptables, configure]

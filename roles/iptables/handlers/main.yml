@@ -1,0 +1,10 @@
+---
+- name: apply v4 rules
+  service:
+    name: "{{ iptables_rules_v4_service }}"
+    state: restarted
+
+- name: apply v6 rules
+  service:
+    name: "{{ iptables_rules_v6_service }}"
+    state: restarted
