@@ -1,5 +1,9 @@
 ---
-netdata_add_repository_script: https://packagecloud.io/install/repositories/netdata/netdata/script.deb.sh
+netdata_repository_channel: stable
+netdata_repository_url: "https://repository.netdata.cloud/repos/{{ netdata_repository_channel }}/{{ ansible_distribution | lower }}"
+netdata_repository_signing_key_url: https://repository.netdata.cloud/netdatabot.gpg.key
+netdata_repository_signing_key_path: /usr/share/keyrings/netdata-archive-keyring.asc
+netdata_apt_cache_valid_time: 3600
 
 netdata_conf_dir: /etc/netdata
 netdata_conf: |
