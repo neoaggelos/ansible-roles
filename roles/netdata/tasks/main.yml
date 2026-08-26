@@ -1,4 +1,11 @@
 ---
+- name: set ansible_distribution fact
+  setup:
+    gather_subset: hardware
+    filter: ansible_distribution
+  when: ansible_distribution is not defined
+  tags: [netadata]
+
 - name: validate netdata repository configuration
   assert:
     that:
