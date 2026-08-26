@@ -1,16 +1,39 @@
 ---
+- name: validate netdata repository configuration
+  assert:
+    that:
+      - ansible_distribution in ['Debian', 'Ubuntu']
+      - netdata_repository_channel in ['stable', 'edge']
+    fail_msg: >-
+      The Netdata repository supports Debian and Ubuntu with either the stable
+      or edge release channel.
+  tags: [netdata, repository]
+
+- name: install netdata repository signing key
+  get_url:
+    url: "{{ netdata_repository_signing_key_url }}"
+    dest: "{{ netdata_repository_signing_key_path }}"
+    mode: "0644"
+    owner: root
+    group: root
+  tags: [netdata, repository]
+
 - name: add netdata repository
-  shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail
-      curl -s "{{ netdata_add_repository_script }}" | sudo bash
+  apt_repository:
+    repo: >-
+      deb [signed-by={{ netdata_repository_signing_key_path }} by-hash=yes]
+      {{ netdata_repository_url }}/ {{ ansible_distribution_release }}/
+    filename: netdata
+    state: present
+    update_cache: true
   tags: [netdata, repository]
 
 - name: install netdata
-  package:
+  apt:
     name: netdata
     state: present
+    update_cache: true
+    cache_valid_time: "{{ netdata_apt_cache_valid_time }}"
   tags: [netdata, packages]
 
 - name: enable netdata service
