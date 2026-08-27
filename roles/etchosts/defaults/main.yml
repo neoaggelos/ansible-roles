@@ -14,6 +14,7 @@ etchosts_ensure_no_self_loopback: true
 # do not let cloud-init manage /etc/hosts on the machine
 etchosts_ensure_not_managed: true
 
+etchosts_marker: "## {mark} ANSIBLE MANAGED HOSTS"
 etchosts: |
   {% for host in groups['all'] | sort %}
   {{ hostvars[host].ansible_host }} {{ host }} {{ host.split('.')[0] }}

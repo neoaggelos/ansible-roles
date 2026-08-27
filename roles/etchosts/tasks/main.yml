@@ -11,7 +11,7 @@
   blockinfile:
     path: /etc/hosts
     block: "{{ etchosts }}"
-    marker: "## {mark} ANSIBLE MANAGED HOSTS"
+    marker: "{{ etchosts_marker }}"
   notify: clean known hosts
   tags: [etchosts]
 
