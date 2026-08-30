@@ -1,0 +1,20 @@
+---
+# groups:
+# - name: mygroup                            # group name
+#   enabled: true                            # if false, will not do anything
+#   state: present                           # (optional) 'present' or 'absent'
+#   system: true                             # (optional) configure as system group
+usersv2_groups: []
+
+# users:
+# - name: ubuntu                             # user name
+#   enabled: true                            # if false, will not do anything
+#   state: present                           # (optional) 'present' or 'absent'
+#   groups: [group1, group2]                 # (optional) user groups
+#   shell: /bin/bash                         # (optional) user shell
+#   system: true                             # (optional) configure as system user
+#   password: $6$example$mkOojJi.....        # (optional) user password, 'echo my_super_safe_password | openssl passwd -6 -stdin'
+#   password: "{{ 'my_super_safe_password' | password_hash('sha512', 65534 | random(seed=inventory_hostname) | string) }}"   # requires 'passlib'
+#   ssh_key: ssh-ed25519 AAAAC3Nza...        # (optional) configure ssh keys
+#   sudo: ["ALL=(ALL:ALL) NOPASSWD:ALL"]     # (optional) sudoers configuration
+usersv2_users: []

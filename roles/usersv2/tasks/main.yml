@@ -1,0 +1,61 @@
+---
+- name: ensure sudo is installed
+  package:
+    name: sudo
+    state: present
+  tags: [users, sudo]
+
+- name: configure groups
+  group:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default(omit) }}"
+    system: "{{ item.system | default(omit) }}"
+  loop: "{{ usersv2_groups }}"
+  when: item.enabled | default(true)
+  loop_control:
+    label: "{{ item.name }}"
+  tags: [users, groups]
+
+- name: configure users
+  user:
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
+    groups: "{{ item.groups | default([]) | join(',') | default(omit) }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    system: "{{ item.system | default(omit) }}"
+    password: "{{ item.password | default(omit) }}"
+  loop: "{{ usersv2_users  }}"
+  when: item.enabled | default(true)
+  loop_control:
+    label: "{{ item.name }}"
+  tags: [users, create]
+
+- name: configure user ssh keys
+  authorized_key:
+    manage_dir: true
+    exclusive: true
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_key }}"
+  when:
+  - item.enabled | default(true)
+  - item.ssh_key | default('') != ''
+  loop: "{{ usersv2_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  tags: [users, access]
+
+- name: create user sudoers config
+  template:
+    src: sudoers.j2
+    dest: "/etc/sudoers.d/{{ item.name }}"
+    validate: /usr/sbin/visudo -cf %s
+    mode: 0644
+    owner: root
+    group: root
+  when:
+  - item.enabled | default(true)
+  - item.sudo | default([]) | length > 0
+  loop: "{{ usersv2_users }}"
+  loop_control:
+    label: "{{ item.name }}"
+  tags: [users, sudo]

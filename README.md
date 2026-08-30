@@ -45,7 +45,8 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `ssh_keys`                | Configure SSH private keys on nodes                        | Ubuntu, CentOS, Rocky, Debian |
 | `systemd_timesyncd_ntp`   | Configure NTP server for systemd-timesyncd                 | Ubuntu, CentOS, Rocky, Debian |
 | `upgrades`                | Configure cron unattended upgrade schedule                 | Ubuntu, CentOS, Rocky, Debian |
-| `users`                   | Configure users and SSH access                             | Ubuntu, CentOS, Rocky, Debian |
+| `users`                   | (**DEPRECATED**) Configure users and SSH access            | Ubuntu, CentOS, Rocky, Debian |
+| `usersv2`                 | Configure users and SSH access (v2)                        | Ubuntu, CentOS, Rocky, Debian |
 | `utils`                   | Install commonly needed server administration tools        | Ubuntu, CentOS, Rocky, Debian |
 | `xrdp`                    | Install xRDP with the XFCE4 desktop                        | Ubuntu                        |
 | `vfio_pci`                | Configure vfio-pci for GPU passthrough                     | Ubuntu 22.04, 24.04           |

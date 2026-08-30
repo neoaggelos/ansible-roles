@@ -1,4 +1,6 @@
 ---
+### NOTE(neoaggelos/2026-08-30): this role is deprecated, please use neoaggelos.common.usersv2 instead
+
 sudo_group_distro:
   ubuntu: sudo
   debian: sudo
@@ -13,6 +15,7 @@ sudo_group: "{{ sudo_group_distro[ansible_distribution | lower] | default('') }}
 #   - {user: ubuntu, file: .vimrc, mode: "0644"}
 user_dotfiles: []
 
+# DEPRECATED: use users_configure instead
 # configure users and sudoers
 # users_and_groups:
 #   users:
@@ -20,7 +23,6 @@ user_dotfiles: []
 #     - {name: user_with_password, password: "{{ safe_password }}", groups: ["{{ sudo_group }}"]}
 #   sudoers:
 #     - {name: ubuntu, user: "%ubuntu", runas: "ALL=(ALL)", commands: "NOPASSWD: ALL"}
-
 users_and_groups:
   users: []
   sudoers: []

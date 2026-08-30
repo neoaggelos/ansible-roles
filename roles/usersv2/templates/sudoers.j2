@@ -1,0 +1,6 @@
+##
+# {{ ansible_managed }}
+#
+{% for command in item.sudo %}
+{{ item.name }}   {{ command }}
+{% endfor %}
