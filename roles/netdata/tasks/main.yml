@@ -70,6 +70,19 @@
     - restart netdata
   tags: [netdata, config]
 
+- name: opt out from anonymous statistics
+  file:
+    path: "{{ netdata_conf_dir }}/.opt-out-from-anonymous-statistics"
+    state: touch
+    modification_time: preserve
+    access_time: preserve
+    owner: root
+    group: root
+    mode: "0400"
+  notify:
+    - restart netdata
+  tags: [netdata, config]
+
 - name: create netdata conf files
   when: item.state | default('present') == 'present'
   template:
@@ -89,6 +102,28 @@
     dest: "{{ netdata_conf_dir }}/{{ item.name }}"
     state: absent
   loop: "{{ netdata_conf_files }}"
+  notify:
+    - restart netdata
+  tags: [netdata, config]
+
+- name: ensure netdata cloud conf directory
+  file:
+    path: "{{ netdata_cloud_conf_dir }}"
+    state: directory
+    mode: "0770"
+    owner: "netdata"
+    group: "netdata"
+  tags: [netdata, config]
+
+- name: configure cloud.conf
+  blockinfile:
+    path: "{{ netdata_cloud_conf_dir }}/cloud.conf"
+    block: "{{ netdata_cloud_conf }}"
+    marker: "## {mark} ANSIBLE MANAGED CONFIGURATION"
+    create: true
+    mode: "0770"
+    owner: "netdata"
+    group: "netdata"
   notify:
     - restart netdata
   tags: [netdata, config]

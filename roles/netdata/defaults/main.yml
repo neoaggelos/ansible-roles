@@ -9,6 +9,15 @@ netdata_conf_dir: /etc/netdata
 netdata_conf: |
   [global]
     bind socket to IP = localhost
+  [registry]
+    enabled = no
+
+netdata_cloud_conf_dir: /var/lib/netdata/cloud.d
+netdata_cloud_conf: |
+  [global]
+    enabled = no
+
+netdata_opt_out_from_anonymous_statistics: true
 
 # enable Slack notifications
 netdata_slack_notifications_enabled: false
