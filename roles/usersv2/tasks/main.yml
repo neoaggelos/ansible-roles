@@ -24,8 +24,9 @@
     shell: "{{ item.shell | default('/bin/bash') }}"
     system: "{{ item.system | default(omit) }}"
     password: "{{ item.password | default(omit) }}"
-  loop: "{{ usersv2_users  }}"
-  when: item.enabled | default(true)
+  when:
+  - item.enabled | default(true)
+  loop: "{{ usersv2_users }}"
   loop_control:
     label: "{{ item.name }}"
   tags: [users, create]
