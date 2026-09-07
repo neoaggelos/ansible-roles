@@ -78,9 +78,8 @@ def run_module():
     except AttributeError:
         module.fail_json(f"router {router_name} could not be found")
 
-    try:
-        subnet = c.get_subnet(subnet_name)
-    except AttributeError:
+    subnet = c.get_subnet(subnet_name)
+    if not subnet:
         module.fail_json(f"subnet {subnet_name} could not be found")
 
     router_ports = c.list_ports({"device_id": router_id, "network_id": subnet.network_id})
