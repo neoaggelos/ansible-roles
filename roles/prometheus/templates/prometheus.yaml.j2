@@ -21,4 +21,4 @@ alerting:
 {% endif %}
 
 scrape_configs:
-{{ prometheus_scrape_configs | to_nice_yaml(indent=2) }}
+  {{ prometheus_scrape_configs | to_nice_yaml(indent=2) | indent(2, False) }}

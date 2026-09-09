@@ -1,6 +1,6 @@
 ---
 # prometheus version
-prometheus_image: quay.io/prometheus/prometheus:v3.5.0
+prometheus_image: quay.io/prometheus/prometheus:v3.14.0
 
 # runtime configuration
 prometheus_dir: /opt/prometheus
