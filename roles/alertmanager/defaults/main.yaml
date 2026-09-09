@@ -1,6 +1,6 @@
 ---
 # alertmanager version
-alertmanager_image: quay.io/prometheus/alertmanager:v0.28.1
+alertmanager_image: quay.io/prometheus/alertmanager:v0.34.0
 
 # runtime configuration
 alertmanager_dir: /opt/alertmanager
