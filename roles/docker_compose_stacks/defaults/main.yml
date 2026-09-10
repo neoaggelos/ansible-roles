@@ -1,0 +1,34 @@
+---
+# define list of docker-compose stacks to manage. each stack needs a base directory, user id to run as, and list of templates to render
+#
+# for example, to render a docker-compose stack for a caddy reverse-proxy:
+#
+# docker_compose_stacks_v0:
+# - directory: /opt/caddy
+#   # 'state=restarted' -- ensure the stack is restarted (docker-compose up -d --force-recreate)
+#   # 'state=present'   -- ensure the stack is up and running (docker-compose up -d, restart on changes)
+#   # 'state=stopped'   -- ensure the stack is stopped (docker-compose down)
+#   # 'state=absent'    -- ensure the stack is deleted (docker-compose down -v)
+#   state: present
+#   user: 0
+#   templates:
+#   - { path: docker-compose.yaml, template: "{{ playbook_dir }}/templates/caddy/docker-compose.yaml" }
+#   - { path: Caddyfile, template: "{{ playbook_dir }}/templates/caddy/Caddyfile" }
+docker_compose_stacks_v0: []
+
+# docker compose command to run based on desired state
+docker_compose_cmd: |
+  {% set state = item.state | default('present') %}
+  {% set changed = update_templates.results | selectattr('item.0.directory', '==', item.directory) | selectattr('changed') | length > 0 %}
+
+  {% if state == 'restarted' or (state == 'present' and changed) %}
+    sudo docker compose up -d --force-recreate
+  {% elif state == 'present' %}
+    sudo docker compose up -d
+  {% elif state == 'stopped' %}
+    sudo docker compose down
+  {% elif state == 'absent' %}
+    sudo docker compose down -v
+  {% else %}
+    invalid
+  {% endif %}

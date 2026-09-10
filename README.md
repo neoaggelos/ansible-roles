@@ -18,6 +18,7 @@ This is a list of re-usable infrastructure-related Ansible roles.
 | `disable_tracker`         | Disable GNOME Tracker                                      | Ubuntu                        |
 | `docker`                  | Install Docker and (optionally) Docker Compose             | Ubuntu, CentOS, Rocky, Debian |
 | `docker_compose`          | Install Docker Compose                                     | Ubuntu, CentOS, Rocky, Debian |
+| `docker_compose_stacks`   | Install and manage Docker Compose Stacks                   | Ubuntu, CentOS, Rocky, Debian |
 | `etc_hosts`               | Configure entries in /etc/hosts                            | Ubuntu, CentOS, Rocky, Debian |
 | `hostname`                | Configure host name                                        | Ubuntu, CentOS, Rocky, Debian |
 | `iptables`                | Configure persistent iptables rules                        | Ubuntu, CentOS, Rocky, Debian |
