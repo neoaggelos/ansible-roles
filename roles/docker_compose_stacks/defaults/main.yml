@@ -5,23 +5,43 @@
 #
 # docker_compose_stacks_v0:
 # - directory: /opt/caddy
+#   # if enabled is false, then ignore and do nothing
+#   enabled: true
 #   # 'state=restarted' -- ensure the stack is restarted (docker-compose up -d --force-recreate)
 #   # 'state=present'   -- ensure the stack is up and running (docker-compose up -d, restart on changes)
 #   # 'state=stopped'   -- ensure the stack is stopped (docker-compose down)
 #   # 'state=absent'    -- ensure the stack is deleted (docker-compose down -v)
 #   state: present
-#   user: 0
+#   # default 'owner' and 'group' for files, directories, unless specified below
+#   owner: root
+#   group: root
+#   # default 'mode' for created files and templates
+#   mode: "0644"
+#   # directories to create. 'owner', 'group' and 'mode' are optional
+#   directories:
+#   - { path: cert, owner: root, group: root, mode: 0755}
+#   # templates to render. 'path' and 'template' are required. 'state', 'owner', 'group', 'mode' and 'validate' are optional
 #   templates:
-#   - { path: docker-compose.yaml, template: "{{ playbook_dir }}/templates/caddy/docker-compose.yaml" }
-#   - { path: Caddyfile, template: "{{ playbook_dir }}/templates/caddy/Caddyfile" }
+#   - { path: docker-compose.yaml, src: "{{ playbook_dir }}/templates/caddy/docker-compose.yaml" }
+#   - { path: Caddyfile, src: "{{ playbook_dir }}/templates/caddy/Caddyfile" }
+#   # files to copy. 'src' and 'path' are required. 'owner', 'group', 'mode' and 'validate' are optional
+#   files:
+#   - { path: dashboard.json, src: "{{ playbook_dir }}/files/dashboards/default.json" }
 docker_compose_stacks_v0: []
 
 # docker compose command to run based on desired state
+# - 'item' is the entry from docker_compose_stacks_v0
+# - 'templates_applied' is the registered results from rendering all templates
+# - 'files_applied' is the registered results from copying all files
 docker_compose_cmd: |
   {% set state = item.state | default('present') %}
-  {% set changed = update_templates.results | selectattr('item.0.directory', '==', item.directory) | selectattr('changed') | length > 0 %}
+  {% set templates_changed = templates_applied.results | selectattr('item.0.path', '==', item.path) | selectattr('changed') | length > 0 %}
+  {% set files_changed = files_applied.results | selectattr('item.0.path', '==', item.path) | selectattr('changed') | length > 0 %}
+  {% set changed = templates_changed or files_changed %}
 
-  {% if state == 'restarted' or (state == 'present' and changed) %}
+  {% if not (item.enabled | default(true)) %}
+    invalid
+  {% elif state == 'restarted' or (state == 'present' and changed) %}
     sudo docker compose up -d --force-recreate
   {% elif state == 'present' %}
     sudo docker compose up -d

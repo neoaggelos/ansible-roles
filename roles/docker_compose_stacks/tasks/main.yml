@@ -1,36 +1,69 @@
 ---
-- name: configure directories
+- name: ensure directory
+  when: item.enabled | default(True)
   file:
-    path: "{{ item.directory }}"
-    owner: "{{ item.user | default('root') }}"
-    group: "{{ item.user | default('root') }}"
+    path: "{{ item.path }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
     mode: "0750"
     state: directory
   loop: "{{ docker_compose_stacks_v0 }}"
   loop_control:
-    label: "{{ item.directory }}"
+    label: "{{ item.path }}"
   tags: [stacks, directories]
 
-- name: configure template files
-  template:
-    src: "{{ item.1.template }}"
-    dest: "{{ item.0.directory }}/{{ item.1.path }}"
-    owner: "{{ item.user | default('root') }}"
-    group: "{{ item.user | default('root') }}"
-    mode: "{{ item.1.mode | default('0640') }}"
-  loop: "{{ docker_compose_stacks_v0 | subelements('templates') }}"
+- name: ensure subdirectories
+  when: item.enabled | default(True)
+  file:
+    path: "{{ item.0.path }}/{{ item.1.path }}"
+    owner: "{{ item.1.owner | default(item.0.owner) | default('root') }}"
+    group: "{{ item.1.group | default(item.0.group) | default('root') }}"
+    mode: "{{ item.1.mode | default('0750') }}"
+    state: directory
+  loop: "{{ docker_compose_stacks_v0 | subelements('directories', skip_missing=True) }}"
   loop_control:
-    label: "{{ item.0.directory }} -> {{ item.1.path }}"
-  register: update_templates
+    label: "{{ item.0.path }} -> {{ item.1.path }}"
+  tags: [stacks, directories]
+
+- name: ensure templates
+  when: item.enabled | default(True)
+  template:
+    src: "{{ item.1.src }}"
+    dest: "{{ item.0.path }}/{{ item.1.path }}"
+    owner: "{{ item.1.owner | default(item.0.owner) | default('root') }}"
+    group: "{{ item.1.group | default(item.0.group) | default('root') }}"
+    mode: "{{ item.1.mode | default('0640') }}"
+    validate: "{{ item.1.validate | default(omit) }}"
+  loop: "{{ docker_compose_stacks_v0 | subelements('templates', skip_missing=True) }}"
+  loop_control:
+    label: "{{ item.0.path }} -> {{ item.1.path }}"
+  register: templates_applied
   tags: [stacks, templates]
+
+- name: ensure config files
+  when: item.enabled | default(True)
+  copy:
+    src: "{{ item.1.src }}"
+    dest: "{{ item.0.path }}/{{ item.1.path }}"
+    owner: "{{ item.1.owner | default(item.0.owner) | default('root') }}"
+    group: "{{ item.1.group | default(item.0.group) | default('root') }}"
+    mode: "{{ item.1.mode | default('0640') }}"
+    validate: "{{ item.1.validate | default(omit) }}"
+  loop: "{{ docker_compose_stacks_v0 | subelements('files', skip_missing=True) }}"
+  loop_control:
+    label: "{{ item.0.path }} -> {{ item.1.path }}"
+  register: files_applied
+  tags: [stacks, configs]
 
 - name: run docker compose
   shell:
     cmd: "{{ docker_compose_cmd }}"
-    chdir: "{{ item.directory }}"
-  when: docker_compose_cmd | trim != 'invalid'
+    chdir: "{{ item.path }}"
+  when:
+  - item.enabled | default(True)
+  - docker_compose_cmd | trim != 'invalid'
   loop: "{{ docker_compose_stacks_v0 }}"
   loop_control:
     index_var: item_idx
-    label: "{{ item.directory }} ({{ item.state | default('present') }}) -> {{ docker_compose_cmd | trim }}"
+    label: "{{ item.path }} ({{ item.state | default('present') }}) -> {{ docker_compose_cmd | trim }}"
   tags: [stacks]
