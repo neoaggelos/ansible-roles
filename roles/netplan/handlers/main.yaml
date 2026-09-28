@@ -1,3 +1,7 @@
 ---
 - name: netplan apply
   shell: "{{ netplan_binary }} apply"
+
+- name: clear facts
+  meta: clear_facts
+  when: ansible_facts.interfaces is defined

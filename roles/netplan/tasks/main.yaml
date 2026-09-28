@@ -2,31 +2,26 @@
 - name: copy netplan configuration
   template:
     src: netplan_fragment.yml.j2
-    dest: "{{ netplan_config_dir }}/{{ filename }}"
+    dest: "{{ netplan_config_dir }}/{{ item.key }}"
     owner: "root"
     group: "root"
     mode: "0440"
   loop: "{{ netplan_fragments | dict2items }}"
-  vars:
-    filename: "{{ item.key }}"
-    contents: "{{ item.value.contents | default('') }}"
-    state: "{{ item.value.state | default('present') }}"
-  when:
-    - state == 'present'
+  when: (item.value.state | default('present')) == 'present'
+  register: netplan_config_present
   notify:
-    - netplan apply
+  - netplan apply
+  - clear facts
   tags: [netplan]
 
 - name: cleanup netplan configuration
   file:
-    path: "{{ netplan_config_dir }}/{{ filename }}"
+    path: "{{ netplan_config_dir }}/{{ item.key }}"
     state: absent
   loop: "{{ netplan_fragments | dict2items }}"
-  vars:
-    filename: "{{ item.key }}"
-    state: "{{ item.value.state | default('present') }}"
-  when:
-    - state == 'absent'
+  when: (item.value.state | default('present')) == 'absent'
+  register: netplan_config_absent
   notify:
-    - netplan apply
+  - netplan apply
+  - clear facts
   tags: [netplan]
