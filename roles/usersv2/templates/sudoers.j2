@@ -1,6 +1,8 @@
 ##
 # {{ ansible_managed }}
 #
+{% if item.state | default('present') != 'absent' %}
 {% for command in item.sudo %}
 {{ item.name }}   {{ command }}
 {% endfor %}
+{% endif %}
