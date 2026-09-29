@@ -20,11 +20,11 @@
 #   # directories to create. 'owner', 'group' and 'mode' are optional
 #   directories:
 #   - { path: cert, owner: root, group: root, mode: 0755}
-#   # templates to render. 'path' and 'template' are required. 'state', 'owner', 'group', 'mode' and 'validate' are optional
+#   # templates to render. 'src' is required. 'path' defaults to basepath of 'src'. 'state', 'owner', 'group', 'mode' and 'validate' are optional
 #   templates:
 #   - { path: docker-compose.yaml, src: "{{ playbook_dir }}/templates/caddy/docker-compose.yaml" }
 #   - { path: Caddyfile, src: "{{ playbook_dir }}/templates/caddy/Caddyfile" }
-#   # files to copy. 'src' and 'path' are required. 'owner', 'group', 'mode' and 'validate' are optional
+#   # files to copy. 'src' is required. 'path' defaults to basepath of 'src'. 'owner', 'group', 'mode' and 'validate' are optional
 #   files:
 #   - { path: dashboard.json, src: "{{ playbook_dir }}/files/dashboards/default.json" }
 docker_compose_stacks_v0: []
