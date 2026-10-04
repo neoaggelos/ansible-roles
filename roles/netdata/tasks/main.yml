@@ -4,7 +4,14 @@
     gather_subset: hardware
     filter: ansible_distribution
   when: ansible_distribution is not defined
-  tags: [netadata]
+  tags: [netdata]
+
+- name: set ansible_distribution_release fact
+  setup:
+    gather_subset: hardware
+    filter: ansible_distribution_release
+  when: ansible_distribution_release is not defined
+  tags: [netdata]
 
 - name: validate netdata repository configuration
   assert:
@@ -17,8 +24,8 @@
   tags: [netdata, repository]
 
 - name: install netdata repository signing key
-  get_url:
-    url: "{{ netdata_repository_signing_key_url }}"
+  template:
+    src: "netdatabot.gpg.key"
     dest: "{{ netdata_repository_signing_key_path }}"
     mode: "0644"
     owner: root
