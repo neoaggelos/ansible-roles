@@ -128,7 +128,7 @@
     block: "{{ netdata_cloud_conf }}"
     marker: "## {mark} ANSIBLE MANAGED CONFIGURATION"
     create: true
-    mode: "0770"
+    mode: "0660"
     owner: "netdata"
     group: "netdata"
   notify:
